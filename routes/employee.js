@@ -5,33 +5,8 @@ var EmployeeSql = require('../models/employeesql');
 var router = express.Router();
 var pool = mysql.createPool( dbConfig.mysql );
 
-// 响应一个JSON数据
-var responseJSON = function (res, ret) {
-    if(typeof ret === 'undefined') {
-        res.json({     code:'-200',     msg: '操作失败'
-        });
-    } else {
-        res.json(ret);
-    }};
-
 
 /*
-* 账户列表
-* */
-router.post('/add', function(req, res) {
-    pool.getConnection(function(err, connection) {
-        var param = ['陈曦', '123456',33, '33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',null,null,null];
-        connection.query(EmployeeSql.insert, param, function(err, result) {
-            // 以json形式，把操作结果返回给前台页面
-            responseJSON(res, result);
-            // 释放连接
-            connection.release();
-
-        });
-    });
-});
-
-
 /*
 * 账户列表
 * */
@@ -62,23 +37,33 @@ router.get('/list', function(req, res) {
         pool.getConnection(function(err, connection) {
             connection.query(querySqlResult, param, function(err, employees) {
                 if(err){
-
+                        res.render('employee/list', {
+                            status:false,
+                            msg:err.toString(),
+                            active_url:'employee/list'
+                        });
                 }else {
-                    console.log(employees);
-                    connection.query(querySqlCount,param,function(err, count) {
-                        console.log(count);
-                        var pageTotal =Math.ceil(count/pageSize);
-                            res.render('employee/list', {
-                                status:true,
-                                employees:employees,
-                                searchParams:searchParams,
-                                pageNum:pageNum,
-                                pageTotal:pageTotal,
-                                active_url:'employee/list'
-                            });
+                    connection.query(querySqlCount,param,function(err, result) {
+                        if(err){
+                                res.render('employee/list', {
+                                    status:false,
+                                    msg:err.toString(),
+                                    active_url:'employee/list'
+                                });
+                        }else {
+                            var pageTotal =Math.ceil(result[0].cnt/pageSize);
+                                res.render('employee/list', {
+                                    status:true,
+                                    employees:employees,
+                                    searchParams:searchParams,
+                                    pageNum:pageNum,
+                                    pageTotal:pageTotal,
+                                    active_url:'employee/list'
+                                });
+                        }
+                        connection.release();
                     });
                 }
-                connection.release();
             });
         });
 });
@@ -90,24 +75,35 @@ router.get('/list', function(req, res) {
 router.get('/add',function(req, res) {res.render('employee/add', {});});
 
 router.post('/add', function(req, res) {
-    var new_employee = new Employee(
-        {
-            employee_name: req.body.employee_name,
-            password:req.body.password,
-            birthday: req.body.birthday,
-            age:req.body.age,
-            wexin:req.body.wexin,
-            email:req.body.email,
-            home_address:req.body.home_address,
-            phone_no1:req.body.phone_no1,
-            phone_no2:req.body.phone_no2
-        }
-    );
-    new_employee.save(function (err, employee) {
-        if (err) {
-        }else {
-        }
-        res.redirect('/employee/list');
+    pool.getConnection(function(err, connection) {
+        var param = [
+                        req.body.employee_name,
+                        req.body.password,
+                        req.body.age,
+                        req.body.email,
+                        req.body.home_address,
+                        req.body.phone_no1,
+                        req.body.phone_no2,
+                        null,
+                        null
+        ];
+
+        connection.query(EmployeeSql.insert, param, function(err, result) {
+            if(err){
+                console.log(err.toString());
+                res.render('employee/add', {
+                    status:false,
+                    msg:err.toString(),
+                    active_url:'employee/list'
+                });
+            }else {
+                console.log(result);
+                res.redirect('/employee/list');
+                connection.release();
+
+            }
+
+        });
     });
 });
 

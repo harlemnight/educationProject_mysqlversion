@@ -17,16 +17,6 @@ var baby = require('./routes/baby');
 var course = require('./routes/course');
 
 
-/*
-* mysql version controller
-* */
-/*
-var index_mysql = require('./routes/mysql/index');*/
-var employee_mysql = require('./routes/mysql/employee');/*
-var baby_mysql = require('./routes/mysql/baby');
-var course_mysql = require('./routes/mysql/course');*/
-
-
 var app = express();
 
 // view engine setup
@@ -44,22 +34,11 @@ app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-/*
-* mongoose version controller
-* */
 app.use('/', index);
 app.use('/employee',employee);
 app.use('/baby',baby);
 app.use('/course',course);
 
-
-/*
-* mysql version controller
-* *//*
-app.use('/mysql/', index_mysql);*/
-app.use('/mysql/employee',employee_mysql);/*
-app.use('/mysql/baby',baby_mysql);
-app.use('/mysql/course',course_mysql);*/
 
 
 /*

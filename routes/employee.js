@@ -1,107 +1,93 @@
 var express = require('express');
-var mongoose = require('mongoose');
-var dbConfig = require('../models/dbConfig');
-var Employee =  require('../models/employee').employee;
+var mysql = require('mysql');
+var dbConfig = require('../models/mysqldb');
+var EmployeeSql = require('../models/employeesql');
 var router = express.Router();
-mongoose.connect(dbConfig.dblink,dbConfig.userMongoClent);
+var pool = mysql.createPool( dbConfig.mysql );
+
+// 响应一个JSON数据
+var responseJSON = function (res, ret) {
+    if(typeof ret === 'undefined') {
+        res.json({     code:'-200',     msg: '操作失败'
+        });
+    } else {
+        res.json(ret);
+    }};
+
 
 /*
- * 账户登录
- *
- */
-router.get('/', function(req, res) {
-    res.render('employee/login', { title: '登录'});
-});
+* 账户列表
+* */
+router.post('/add', function(req, res) {
+    pool.getConnection(function(err, connection) {
+        var param = ['陈曦', '123456',33, '33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',null,null,null];
+        connection.query(EmployeeSql.insert, param, function(err, result) {
+            // 以json形式，把操作结果返回给前台页面
+            responseJSON(res, result);
+            // 释放连接
+            connection.release();
 
-
-/*
- * 账户认证
- */
-
-router.post('/login', function(req, res) {
-    var login_employee = { employee_name: req.body.employee_name};
-    var status = true;
-    var msg = "";
-    //这里的User就是从model中获取user对象，通过global.dbHandel全局方法（这个方法在app.js中已经实现)
-    Employee.findOne(login_employee,function(err,doc){   //通过此model以用户名的条件 查询数据库中的匹配信息
-        if(err){
-            //res.send(500);
-            status = false;
-            msg = "未知错误";
-        }else if(!doc){                                 //查询不到用户名匹配信息，则用户名不存在
-            status = false;
-            msg = login_employee.employee_name+" 账户不存在";
-        }else{
-            if(req.body.password != doc.password){     //查询到匹配用户名的信息，但相应的password属性不匹配
-                status = false;
-                msg = "密码错误";
-            }else{                                     //信息匹配成功，则将此对象（匹配到的user) 赋给session.user  并返回成功
-
-            }
-        }
-
-        if (status) {
-            res.redirect('list');
-        }else {
-            res.render('employee/login', { title: '登录成功',msg:msg});
-        }
-
+        });
     });
 });
+
 
 /*
 * 账户列表
 * */
 router.get('/list', function(req, res) {
-    var searchparams = req.query.searchparams;
+    var searchParams = req.query.searchParams;
     var num = req.query.page;
     var pageNum = 0;
-    var pageSize = 10;
-    if ( num == undefined || num <= 1) {
-        pageNum = 1;
-    }else {
-        pageNum = num;
-    }
+    var pageSize = 2;
+        if ( num == undefined || num <= 1) {
+            pageNum = 1;
+        }else {
+            pageNum = num;
+        }
     var offset = (parseInt(pageNum)-1)*pageSize;
-    var condition
-    if (searchparams==undefined||searchparams==""){
-        condition = {yxbz:'Y'};
-    }else {
-        condition = {yxbz:'Y',$or:[{"employee_name":searchparams},
-            {"phone_no1":searchparams}]
-        };
-    }
+    var param ;
+    var querySqlResult ;
+    var querySqlCount ;
+            if ( !(searchParams==undefined) && !(searchParams=="")){
+                param = [searchParams,searchParams,offset,pageSize];
+                querySqlResult = EmployeeSql.queryAllBySearch;
+                querySqlCount = EmployeeSql.queryCountBySearch;
+            }else {
+                param = [offset,pageSize];
+                querySqlResult = EmployeeSql.queryAll;
+                querySqlCount = EmployeeSql.queryCount;
+            }
 
-    Employee.find(condition,//这里是查询条件如果没有条件就是查询所有的数据，此参数可不传递  name: /周/
-        function (err, employees) {
-            if (err) {
-                res.render('employee/list', { msg:err.toString()});
-            }
-            else {
-                    Employee.count(condition,
-                        function(err,count){
-                            var pageTotal =Math.ceil(count/pageSize);
-                            res.render('employee/list', {   status:true,
-                                                            employees:employees,
-                                                            searchparams:searchparams,
-                                                            pageNum:pageNum,
-                                                            pageTotal:pageTotal,
+        pool.getConnection(function(err, connection) {
+            connection.query(querySqlResult, param, function(err, employees) {
+                if(err){
+
+                }else {
+                    console.log(employees);
+                    connection.query(querySqlCount,param,function(err, count) {
+                        console.log(count);
+                        var pageTotal =Math.ceil(count/pageSize);
+                            res.render('employee/list', {
+                                status:true,
+                                employees:employees,
+                                searchParams:searchParams,
+                                pageNum:pageNum,
+                                pageTotal:pageTotal,
                                 active_url:'employee/list'
-                                                        });
-                        }
-                )
-            }
-        }).limit(pageSize).skip(offset).sort({'lrrq':-1});
+                            });
+                    });
+                }
+                connection.release();
+            });
+        });
 });
 
 
 /*
  * 账户添加
  */
-router.get('/add',function(req, res) {
-    res.render('employee/add', { });
-
-});
+router.get('/add',function(req, res) {res.render('employee/add', {});});
 
 router.post('/add', function(req, res) {
     var new_employee = new Employee(
@@ -155,13 +141,13 @@ router.get('/modify/:id',function(req, res) {
 * */
 router.post('/modify',function(req, res) {
     var employee = {
-            employee_name: req.body.employee_name,
-            age:req.body.age,
-            email:req.body.email,
-            home_address:req.body.home_address,
-            phone_no1:req.body.phone_no1,
-            phone_no2:req.body.phone_no2,
-            xgrq:Date.now()
+        employee_name: req.body.employee_name,
+        age:req.body.age,
+        email:req.body.email,
+        home_address:req.body.home_address,
+        phone_no1:req.body.phone_no1,
+        phone_no2:req.body.phone_no2,
+        xgrq:Date.now()
     };
     var conditions = {_id:req.body._id};
     var update     = {$set : employee};

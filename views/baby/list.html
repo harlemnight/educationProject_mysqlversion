@@ -7,9 +7,9 @@
 <h2 class="sub-header">宝贝信息</h2>
     <div class="row placeholders">
             <form class="navbar-form navbar-right" action="/baby/list" method="get"  >
-                <input type="text" class="form-control" name="searchparams"
-                       id="searchparams"  placeholder="姓名/电话/父亲/母亲"
-                        value="<%=locals.searchparams %>"
+                <input type="text" class="form-control" name="searchParams"
+                       id="searchParams"  placeholder="姓名/电话/父亲/母亲"
+                        value="<%=locals.searchParams %>"
                 >
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
@@ -20,10 +20,10 @@
                 <tr>
                     <th style="width:4%;">序号</th>
                     <th style="width:8%;">姓名</th>
-                    <th style="width:8%;">出生日期</th>
+                    <th style="width:10%;">出生日期</th>
                     <th style="width:10%;">父亲</th>
                     <th style="width:10%;">母亲</th>
-                    <th style="width:10%;">剩余课程天数</th>
+                    <th style="width:8%;">剩余天数</th>
                     <th style="width:10%;">联系电话1</th>
                     <th style="width:29%;">联系地址</th>
                     <th style="width:1%;" ></th>
@@ -40,13 +40,13 @@
                             <td ><%= toLocalDate(baby.birthday) %></td>
                             <td><%= baby.father %></td>
                             <td ><%= baby.mather %></td>
-                            <td><%= baby.init_count %></td>
+                            <td><%= baby.course_count %></td>
                             <td><%= baby.phone_no1 %></td>
                             <td><%= baby.home_address %></td>
                             <td ></td>
                             <td >
                                 <a href="/baby/modify/<%=baby._id %>">修改</a>
-                                <a href="/baby/delete?id=<%=baby._id %>"
+                                <a href="/baby/delete?_id=<%=baby._id %>"
                                    onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                             </td>
                         </tr>
@@ -77,8 +77,12 @@
 <script type="text/javascript">
 
     function forward(next){
-        var page = (next==0)?$('#pageNum').val():parseInt('<%=pageNum%>')+ next;
-        window.location.href='/baby/list?page='+page+'&searchparams='+$('#searchparams').val();
+        var num = $('#pageNum').val();
+        if (isNaN(num)){
+            num =0;
+        }
+        var page = (next==0)?num:parseInt('<%=pageNum%>')+ next;
+        window.location.href='/baby/list?page='+page+'&searchParams='+$('#searchParams').val();
     };
 
 

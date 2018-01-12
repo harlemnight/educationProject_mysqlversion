@@ -74,19 +74,32 @@
                 <% if(locals.active_url=='course/list') { %>
                 class="active"
                 <% }%>
-                ><a href="/course/list">课程记录</a></li>
+                >
+                <a href="/course/list">课程记录</a></li>
                 <li
                 <% if(locals.active_url=='course/add') { %>
                 class="active"
                 <% }%>
-                ><a href="/course/add">课程签到</a></li>
+                >
+                <a href="/course/add">课程预约</a></li>
                 <li
                 <% if(locals.active_url=='employee/list') { %>
                 class="active"
                 <% }%>
                 >
                 <a href="/employee/list">员工信息</a></li>
-
+                <li
+                <% if(locals.active_url=='order/') { %>
+                class="active"
+                <% }%>
+                >
+                <a href="/order">办理续卡</a></li>
+                <li
+                <% if(locals.active_url=='config/') { %>
+                class="active"
+                <% }%>
+                >
+                <a href="/config">功能设置</a></li>
             </ul>
             <!--
             <ul class="nav nav-sidebar">

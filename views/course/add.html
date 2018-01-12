@@ -1,6 +1,6 @@
 <% include ../header.html %>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h1 class="page-header">创建课程记录卡</h1>
+    <h1 class="page-header">课程预约</h1>
     <div class="row placeholders">
         <form id="course_form" name="course_form" class="form-inline"
                 method="post" action="/course/add" onsubmit="return formCheck()">
@@ -92,7 +92,11 @@
     $('input[type=checkbox]').prop('checked', $(checkbox).prop('checked'));
     };
     function forward(next){
-        var page = (next==0)?$('#pageNum').val():parseInt('<%=pageNum%>')+ next;
+        var num = $('#pageNum').val();
+        if (isNaN(num)){
+            num =0;
+        }
+        var page = (next==0)?num:parseInt('<%=pageNum%>')+ next;
         window.location.href='/course/add?page='+page+'&course_time='+$('#course_time').val()+
             '&course_rq='+$('#course_rq').val();
     };

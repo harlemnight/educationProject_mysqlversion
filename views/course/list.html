@@ -89,7 +89,11 @@
 
 <script type="text/javascript">
     function forward(next){
-            var page = (next==0)?$('#pageNum').val():parseInt('<%=pageNum%>')+ next;
+        var num = $('#pageNum').val();
+        if (isNaN(num)){
+            num =0;
+        }
+        var page = (next==0)?num:parseInt('<%=pageNum%>')+ next;
             window.location.href='/course/list?page='+page+'&baby_name='+$('#baby_name').val()+
                 '&course_rqq='+$('#course_rqq').val()+
                 '&course_rqz='+$('#course_rqz').val();

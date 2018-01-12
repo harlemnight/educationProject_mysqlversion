@@ -34,7 +34,7 @@
                     <td><%= employee.home_address %></td>
                     <td></td>
                     <td><a href="/employee/modify/<%=employee._id %>">修改</a>
-                        <a href="/employee/delete?id=<%=employee._id %>"
+                        <a href="/employee/delete?_id=<%=employee._id %>"
                            onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                     </td>
                 </tr>
@@ -64,7 +64,11 @@
 <script type="text/javascript">
 
     function forward(next){
-        var page = (next==0)?$('#pageNum').val():parseInt('<%=pageNum%>')+ next;
+        var num = $('#pageNum').val();
+        if (isNaN(num)){
+            num =0;
+        }
+        var page = (next==0)?num:parseInt('<%=pageNum%>')+ next;
         window.location.href='/employee/list?page='+page+'&searchParams='+$('#searchParams').val();
     };
 

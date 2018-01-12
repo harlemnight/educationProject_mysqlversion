@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var moment = require('moment');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
@@ -15,6 +16,10 @@ var index = require('./routes/index');
 var employee = require('./routes/employee');
 var baby = require('./routes/baby');
 var course = require('./routes/course');
+var order = require('./routes/order');
+var config = require('./routes/config');
+
+
 
 
 var app = express();
@@ -38,6 +43,9 @@ app.use('/', index);
 app.use('/employee',employee);
 app.use('/baby',baby);
 app.use('/course',course);
+app.use('/order',order);
+app.use('/config',config);
+
 
 
 
@@ -45,13 +53,12 @@ app.use('/course',course);
 * 自定义应用域方法
 * */
 app.locals['toLocalDate'] = function(format){
-  if (format==null) {
-      return null;
-  }else {
-      return format.toLocaleDateString();
-  }
-
-  };
+    if (format==null) {
+        return null;
+    }else {
+        return moment(format).format('YYYY-MM-DD');
+    }
+};
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

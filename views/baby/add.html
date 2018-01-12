@@ -2,6 +2,18 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <h1 class="page-header">添加宝贝信息</h1>
 
+    <% if(locals.msg) { %>
+    <%if(locals.status) { %>
+    <div class="alert alert-success"  role="alert">
+        <%=msg %>!
+    </div>
+    <% }else { %>
+    <div class="alert alert-danger"  role="alert">
+        <%=msg %>!
+    </div>
+    <% }
+    }%>
+
     <div class="row placeholders">
     <form class="form-horizontal" name="baby_form" id="baby_form" action="/baby/add" method="post" onsubmit="return formCheck()">
         <div class="form-group">
@@ -21,7 +33,7 @@
                 <input type="text" class="form-control" name="age"
                        id="age" placeholder="年龄"
                        value="<% if(locals.baby) {%><%=baby.age%><%}%>"
-                       maxlength="3"
+                       maxlength="4"
                        required
                 >
             </div>
@@ -35,6 +47,7 @@
                     <input type="text" class="form-control" name="birthday"
                            id = "birthday" placeholder="出生日期"
                            readonly
+                           value="<% if(locals.baby) {%><%=baby.birthday%><%}%>"
                     >
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -119,20 +132,20 @@
             <div class="col-sm-10">
                 <select class="form-control"  id="member_lx"  name="member_lx"  required >
                     <option  ></option>
-                    <option value="次卡" >次卡</option>
-                    <option value="月卡" >月卡</option>
-                    <option value="季卡" >季卡</option>
-                    <option value="半年卡" >半年卡</option>
+                    <option value="0" <% if(locals.baby) { if(locals.baby.member_lx==="0") {%> selected  <% }} %>>次卡</option>
+                    <option value="1" <% if(locals.baby) { if(locals.baby.member_lx==="1") {%> selected  <% }} %>>月卡</option>
+                    <option value="2" <% if(locals.baby) { if(locals.baby.member_lx==="2") {%> selected  <% }} %>>季卡</option>
+                    <option value="3" <% if(locals.baby) { if(locals.baby.member_lx==="3") {%> selected  <% }}%>>半年卡</option>
                 </select>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="course_count" class="col-sm-2 control-label">初始课程天数</label>
+            <label for="init_count" class="col-sm-2 control-label">初始课程天数</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="course_count"
-                       id="course_count" placeholder="初始课程天数"
-                       value="<% if(locals.baby) {%><%=baby.course_count%><%}%>"
+                <input type="text" class="form-control" name="init_count"
+                       id="init_count" placeholder="初始课程天数"
+                       value="<% if(locals.baby) {%><%=baby.init_count%><%}%>"
                        required
                 >
             </div>
@@ -152,7 +165,7 @@
             <div class="col-sm-10">
                 <textarea  class="form-control" name="allergy"
                        id="allergy" placeholder="过敏史"
-                ></textarea>
+                ><% if(locals.baby) {%><%=baby.allergy%><%}%></textarea>
             </div>
         </div>
         <hr />

@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var lessMiddleware = require('less-middleware');
 
-
 /*
 * mongoose version controller
 * */

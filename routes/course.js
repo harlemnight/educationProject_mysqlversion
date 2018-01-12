@@ -187,4 +187,8 @@ router.post('/add', function(req, res) {
 });
 
 
+/*
+ * 剩余课程查询
+ */
+router.get('/last',function(req, res) {res.render('course/last', { });});
 module.exports = router;

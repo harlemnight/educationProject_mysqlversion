@@ -63,8 +63,8 @@
                             <td><%= order.je %></td>
                             <td><a href="/order/renewal?baby_id=<%=order.baby_id %>"
                                        onclick="if(confirm('确定续卡?')==false)return false;">续卡</a>
-                                <a href="/order/against?_id=<%=order._id %>"
-                                   onclick="if(confirm('确定冲销?')==false)return false;">冲销</a>
+                                <a href="/order/reverse?_id=<%=order._id %>"
+                                   onclick="if(confirm('确定冲账?')==false)return false;">冲账</a>
                             </td>
                         </tr>
                         <% }) %>

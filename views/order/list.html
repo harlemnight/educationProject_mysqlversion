@@ -1,0 +1,129 @@
+<% include ../header.html %>
+<script>
+    //js赋值方法：<!--前端使用 moment -->
+    //alert(moment(<= baby.birthday>).format('YYYY-MM-DD'));
+</script>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h2 class="sub-header">办卡续卡记录</h2>
+
+        <form id="order_form" name="order_form" class="form-inline"  action="/order/list" method="get"  >
+            <div class="form-group">
+                <div class="input-group date form_date" data-date-format="yyyy-mm-dd" >
+                    <input type="text" class="form-control" name="order_rqq"
+                           id = "order_rqq" placeholder="办卡日期起"
+                           value="<%=locals.order_rqq %>"
+                           readonly
+                    >
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group date form_date" data-date-format="yyyy-mm-dd" >
+                    <input type="text" class="form-control" name="order_rqz"
+                           id = "order_rqz" placeholder="办卡日期止"
+                           value="<%=locals.order_rqz %>"
+                           readonly
+                    >
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="baby_name"  name="baby_name" placeholder="姓名"
+                       value="<%=locals.baby_name %>"
+                >
+            </div>
+            <button type="submit" class="btn btn-default" onclick="forward(2)">查询</button>
+
+            <div class="table-responsive" >
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width:4%;">序号</th>
+                        <th style="width:11%;">办卡日期</th>
+                        <th style="width:12%;">姓名</th>
+                        <th style="width:12%;">会员类型</th>
+                        <th style="width:12%;">课时天数</th>
+                        <th style="width:12%;">办理类型</th>
+                        <th style="width:10%;">金额</th>
+                        <th style="width:10%;">操作</th>
+                    </tr>
+                    </thead>
+                    <% if (orders.length) { %>
+                        <tbody>
+                        <% orders.forEach(function(order,index){ %>
+                        <tr>
+                            <td><%=index+1+parseInt(offset) %></td>
+                            <td><%= toLocalDate(order.order_date)  %></td>
+                            <td><%= order.baby_name %></td>
+                            <td><%= order.member_lx %></td>
+                            <td><%= order.course_count %></td>
+                            <td><%= order.czlx_dm %></td>
+                            <td><%= order.je %></td>
+                            <td><a href="/order/renewal?baby_id=<%=order.baby_id %>"
+                                       onclick="if(confirm('确定续卡?')==false)return false;">续卡</a>
+                                <a href="/order/against?_id=<%=order._id %>"
+                                   onclick="if(confirm('确定冲销?')==false)return false;">冲销</a>
+                            </td>
+                        </tr>
+                        <% }) %>
+                        </tbody>
+                    <% } %>
+                    <tr>
+                        <td></td><td></td><td></td><td></td><td></td>
+                        <td align="right" colspan="3">
+                        <a href="javascript:void(0);" onclick="forward(-1)">上一页</a>
+                        |
+                        <%=parseInt(pageNum) %>
+                        |
+                        <a href="javascript:void(0);" onclick="forward(1)">下一页</a>
+                        共<%=pageTotal %>页
+                        <input type="text" id="pageNum" style="width:30px;"/>
+                        <a href="javascript:void(0);" onclick="forward(0)">跳转</a>
+                    </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+</div>
+
+
+
+<script type="text/javascript">
+    function forward(next){
+        var num = $('#pageNum').val();
+        if (isNaN(num)){
+            num =0;
+        }
+        var page = (next==0)?num:parseInt('<%=pageNum%>')+ next;
+            window.location.href='/order/list?page='+page+'&baby_name='+$('#baby_name').val()+
+                '&order_rqq='+$('#order_rqq').val()+
+                '&order_rqz='+$('#order_rqz').val();
+    };
+
+
+    function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式
+        var  aDate,  oDate1,  oDate2,  iDays
+        aDate  =  sDate1.split("-")
+        oDate1 = new Date(aDate[0] , aDate[1] ,aDate[2]) //转换为12-18-2006格式
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[0] , aDate[1] , aDate[2])
+        iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数
+        return  iDays;
+    }
+
+
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+</script>
+
+<% include ../footer.html %>

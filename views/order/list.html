@@ -4,7 +4,7 @@
     //alert(moment(<= baby.birthday>).format('YYYY-MM-DD'));
 </script>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h2 class="sub-header">办卡续卡记录</h2>
+    <h2 class="sub-header">办卡记录</h2>
 
         <form id="order_form" name="order_form" class="form-inline"  action="/order/list" method="get"  >
             <div class="form-group">
@@ -61,9 +61,9 @@
                             <td><%= order.course_count %></td>
                             <td><%= order.czlx_dm %></td>
                             <td><%= order.je %></td>
-                            <td><a href="/order/renewal?baby_id=<%=order.baby_id %>"
+                            <td><a href="/order/renewal?baby_name=<%=order.baby_name %>&baby_id=<%=order.baby_id %>&czlx_dm=1"
                                        onclick="if(confirm('确定续卡?')==false)return false;">续卡</a>
-                                <a href="/order/reverse?_id=<%=order._id %>"
+                                <a href="/order/renewal?baby_name=<%=order.baby_name %>&baby_id=<%=order.baby_id %>&czlx_dm=2"
                                    onclick="if(confirm('确定冲账?')==false)return false;">冲账</a>
                             </td>
                         </tr>

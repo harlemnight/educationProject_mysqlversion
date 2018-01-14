@@ -9,21 +9,14 @@ var pool = mysql.createPool( dbConfig.mysql );
 * 账户列表
 * */
 router.get('/list', function(req, res) {
-    var searchParams = req.query.searchParams;
-    var num = req.query.page;
-    var pageNum = 0;
+    var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
     var pageSize = 2;
-        if ( num == undefined || num <= 1) {
-            pageNum = 1;
-        }else {
-            pageNum = num;
-        }
     var offset = (parseInt(pageNum)-1)*pageSize;
     var param ;
     var querySqlResult ;
     var querySqlCount ;
-            if ( !(searchParams==undefined) && !(searchParams=="")){
-                param = [searchParams,searchParams,offset,pageSize];
+            if ( !(req.query.searchParams==undefined) && !(req.query.searchParams=="")){
+                param = [req.query.searchParams,req.query.searchParams,offset,pageSize];
                 querySqlResult = EmployeeSql.queryAllBySearch;
                 querySqlCount = EmployeeSql.queryCountBySearch;
             }else {
@@ -53,7 +46,7 @@ router.get('/list', function(req, res) {
                                 res.render('employee/list', {
                                     status:true,
                                     employees:employees,
-                                    searchParams:searchParams,
+                                    searchParams:req.query.searchParams,
                                     pageNum:pageNum,
                                     pageTotal:pageTotal,
                                     active_url:'employee/list'

@@ -49,7 +49,7 @@ CREATE TABLE `babies` (
 /*Data for the table `babies` */
 
 insert  into `babies`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`,`grandma`,`home_address`,`phone_no1`,`phone_no2`,`case`,`allergy`,`hobby`,`character`,`member_lx`,`init_count`,`course_count`,`lrrq`,`xgrq`,`status`,`yxbz`) values 
-(1,'陈亚寒','2014-01-02',3,'陈元',NULL,NULL,NULL,'重庆南岸','17783119364',NULL,'心脏病','花生过敏',NULL,NULL,'1',30,30,'2018-01-13 14:17:37','2018-01-13 14:17:37','0','Y'),
+(1,'陈亚寒','2014-01-02',3,'陈元',NULL,NULL,NULL,'重庆南岸','17783119364',NULL,'心脏病','花生过敏',NULL,NULL,'1',30,0,'2018-01-13 14:17:37','2018-01-13 14:17:37','0','Y'),
 (2,'含韵','2016-06-15',2,NULL,'含苞',NULL,NULL,NULL,'12623119364',NULL,NULL,NULL,NULL,NULL,'2',90,90,'2018-01-13 14:19:32','2018-01-13 14:19:32','0','Y'),
 (3,'张建亚','2012-07-02',5,'张玉玺','韩亚巍','张菲菲','雅菲哦','重庆渝中区','12623113423',NULL,NULL,NULL,NULL,NULL,'3',180,180,'2018-01-13 14:21:00','2018-01-13 14:21:00','0','Y'),
 (4,'紫云没','2013-08-09',5,'子涵','姚非',NULL,NULL,'重庆渝北','13923113423',NULL,NULL,NULL,NULL,NULL,'0',10,10,'2018-01-13 14:22:09','2018-01-13 14:22:09','0','Y'),
@@ -76,9 +76,19 @@ CREATE TABLE `courses` (
   `status` char(1) NOT NULL DEFAULT '0',
   `bz` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*Data for the table `courses` */
+
+insert  into `courses`(`_id`,`babyId`,`course_bh`,`course_rq`,`course_time`,`baby_name`,`father`,`mather`,`phone_no1`,`lrrq`,`xgrq`,`yxbz`,`status`,`bz`) values 
+(1,2,'2018-01-14','2018-01-14','2018-01-14','含韵',NULL,'含苞','12623119364','2018-01-14 23:12:22','2018-01-14 23:12:22','Y','0',NULL),
+(2,3,'2018-01-14','2018-01-14','2018-01-14','张建亚','张玉玺','韩亚巍','12623113423','2018-01-14 23:12:22','2018-01-14 23:12:22','Y','0',NULL),
+(3,5,'2018-01-14','2018-01-14','2018-01-14','谭维','谭非','亚萨萨','17823113423','2018-01-14 23:12:22','2018-01-14 23:12:22','Y','0',NULL),
+(4,6,'2018-01-14','2018-01-14','2018-01-14','刘毅非','刘爸爸','刘妈妈','15823123423','2018-01-14 23:12:22','2018-01-14 23:12:22','Y','0',NULL),
+(8,2,'2018-01-14','2018-01-14','2018-01-14','含韵',NULL,'含苞','12623119364','2018-01-14 23:13:10','2018-01-14 23:13:10','Y','0',NULL),
+(9,3,'2018-01-14','2018-01-14','2018-01-14','张建亚','张玉玺','韩亚巍','12623113423','2018-01-14 23:13:10','2018-01-14 23:13:10','Y','0',NULL),
+(10,5,'2018-01-14','2018-01-14','2018-01-14','谭维','谭非','亚萨萨','17823113423','2018-01-14 23:13:10','2018-01-14 23:13:10','Y','0',NULL),
+(11,6,'2018-01-14','2018-01-14','2018-01-14','刘毅非','刘爸爸','刘妈妈','15823123423','2018-01-14 23:13:10','2018-01-14 23:13:10','Y','0',NULL);
 
 /*Table structure for table `employees` */
 
@@ -159,7 +169,89 @@ insert  into `test`(`a`) values
 ('a'),
 ('a'),
 ('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
+('a'),
 ('a');
+
+/*Table structure for table `tt` */
+
+DROP TABLE IF EXISTS `tt`;
+
+CREATE TABLE `tt` (
+  `_id` bigint(20) NOT NULL DEFAULT '0',
+  `baby_name` varchar(32) NOT NULL,
+  `birthday` date NOT NULL,
+  `age` int(3) DEFAULT NULL,
+  `father` varchar(32) DEFAULT NULL,
+  `mather` varchar(32) DEFAULT NULL,
+  `grandpa` varchar(32) DEFAULT NULL,
+  `grandma` varchar(32) DEFAULT NULL,
+  `home_address` varchar(500) DEFAULT NULL,
+  `phone_no1` varchar(20) NOT NULL,
+  `phone_no2` varchar(20) DEFAULT NULL,
+  `case` varchar(750) DEFAULT NULL,
+  `allergy` varchar(750) DEFAULT NULL,
+  `hobby` varchar(100) DEFAULT NULL,
+  `character` varchar(100) DEFAULT NULL,
+  `member_lx` char(1) NOT NULL DEFAULT '0',
+  `init_count` int(3) NOT NULL,
+  `course_count` int(3) NOT NULL,
+  `lrrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` char(1) NOT NULL DEFAULT '0',
+  `yxbz` char(1) NOT NULL DEFAULT 'Y'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `tt` */
+
+insert  into `tt`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`,`grandma`,`home_address`,`phone_no1`,`phone_no2`,`case`,`allergy`,`hobby`,`character`,`member_lx`,`init_count`,`course_count`,`lrrq`,`xgrq`,`status`,`yxbz`) values 
+(2,'含韵','2016-06-15',2,NULL,'含苞',NULL,NULL,NULL,'12623119364',NULL,NULL,NULL,NULL,NULL,'2',90,90,'2018-01-13 14:19:32','2018-01-13 14:19:32','0','Y'),
+(3,'张建亚','2012-07-02',5,'张玉玺','韩亚巍','张菲菲','雅菲哦','重庆渝中区','12623113423',NULL,NULL,NULL,NULL,NULL,'3',180,180,'2018-01-13 14:21:00','2018-01-13 14:21:00','0','Y'),
+(5,'谭维','2013-03-01',4,'谭非','亚萨萨',NULL,NULL,'重庆贝贝','17823113423',NULL,NULL,NULL,NULL,NULL,'1',30,30,'2018-01-13 14:23:34','2018-01-13 14:23:34','0','Y'),
+(6,'刘毅非','2013-01-04',4,'刘爸爸','刘妈妈',NULL,NULL,'重庆南岸','15823123423',NULL,NULL,NULL,NULL,NULL,'1',7,10,'2018-01-13 14:25:34','2018-01-13 14:25:34','0','Y');
 
 /*!50106 set global event_scheduler = 1*/;
 
@@ -189,7 +281,31 @@ BEGIN
 	    -- update tb_ev_stocks set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;  
 	    # 表2
 	   --  update tb_ev_stock_details set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;
-	    insert into test values('a') ;
+	    insert into courses (
+     babyId,
+     course_bh,
+     course_rq,
+     course_time,
+     baby_name,
+     father,
+     mather,
+     phone_no1
+)
+select
+     bb.`_id` babyId,
+     current_date() course_bh,
+     current_date()course_rq,
+     current_date()　course_time,
+     bb.baby_name,
+     bb.father,
+     bb.mather,
+     bb.phone_no1
+from
+     babies bb
+where bb.yxbz = 'Y'
+     and bb.member_lx > '0'
+     and bb.status = '0'
+     and bb.course_count > 0;
 	    
 	    commit;  #提交事务
     END */$$

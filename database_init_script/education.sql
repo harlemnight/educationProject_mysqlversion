@@ -16,6 +16,23 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`education` /*!40100 DEFAULT CHARACTER S
 
 USE `education`;
 
+/*Table structure for table `appointments` */
+
+DROP TABLE IF EXISTS `appointments`;
+
+CREATE TABLE `appointments` (
+  `_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `baby_id` bigint(20) NOT NULL,
+  `appoint_date` date NOT NULL,
+  `lrrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `yxbz` char(1) NOT NULL DEFAULT 'Y',
+  `status` char(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `appointments` */
+
 /*Table structure for table `babies` */
 
 DROP TABLE IF EXISTS `babies`;
@@ -65,30 +82,22 @@ CREATE TABLE `courses` (
   `babyId` bigint(20) NOT NULL,
   `course_bh` varchar(32) NOT NULL,
   `course_rq` date NOT NULL,
-  `course_time` varchar(10) NOT NULL,
-  `baby_name` varchar(32) NOT NULL,
-  `father` varchar(32) DEFAULT NULL,
-  `mather` varchar(32) DEFAULT NULL,
-  `phone_no1` varchar(20) DEFAULT NULL,
+  `course_time` varchar(32) DEFAULT NULL,
   `lrrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `yxbz` char(1) NOT NULL DEFAULT 'Y',
   `status` char(1) NOT NULL DEFAULT '0',
   `bz` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 
 /*Data for the table `courses` */
 
-insert  into `courses`(`_id`,`babyId`,`course_bh`,`course_rq`,`course_time`,`baby_name`,`father`,`mather`,`phone_no1`,`lrrq`,`xgrq`,`yxbz`,`status`,`bz`) values 
-(1,2,'2018-01-14','2018-01-14','2018-01-14','含韵',NULL,'含苞','12623119364','2018-01-14 23:12:22','2018-01-14 23:12:22','Y','0',NULL),
-(2,3,'2018-01-14','2018-01-14','2018-01-14','张建亚','张玉玺','韩亚巍','12623113423','2018-01-14 23:12:22','2018-01-14 23:12:22','Y','0',NULL),
-(3,5,'2018-01-14','2018-01-14','2018-01-14','谭维','谭非','亚萨萨','17823113423','2018-01-14 23:12:22','2018-01-14 23:12:22','Y','0',NULL),
-(4,6,'2018-01-14','2018-01-14','2018-01-14','刘毅非','刘爸爸','刘妈妈','15823123423','2018-01-14 23:12:22','2018-01-14 23:12:22','Y','0',NULL),
-(8,2,'2018-01-14','2018-01-14','2018-01-14','含韵',NULL,'含苞','12623119364','2018-01-14 23:13:10','2018-01-14 23:13:10','Y','0',NULL),
-(9,3,'2018-01-14','2018-01-14','2018-01-14','张建亚','张玉玺','韩亚巍','12623113423','2018-01-14 23:13:10','2018-01-14 23:13:10','Y','0',NULL),
-(10,5,'2018-01-14','2018-01-14','2018-01-14','谭维','谭非','亚萨萨','17823113423','2018-01-14 23:13:10','2018-01-14 23:13:10','Y','0',NULL),
-(11,6,'2018-01-14','2018-01-14','2018-01-14','刘毅非','刘爸爸','刘妈妈','15823123423','2018-01-14 23:13:10','2018-01-14 23:13:10','Y','0',NULL);
+insert  into `courses`(`_id`,`babyId`,`course_bh`,`course_rq`,`course_time`,`lrrq`,`xgrq`,`yxbz`,`status`,`bz`) values 
+(64,2,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL),
+(65,3,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL),
+(66,5,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL),
+(67,6,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL);
 
 /*Table structure for table `employees` */
 
@@ -119,6 +128,24 @@ insert  into `employees`(`_id`,`employee_name`,`password`,`age`,`email`,`home_ad
 (2,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 22:40:32','2018-01-10 22:40:32','Y',NULL,NULL,'0'),
 (3,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 23:12:17','2018-01-10 23:12:17','Y',NULL,NULL,'0'),
 (4,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 23:40:03','2018-01-10 23:40:03','Y',NULL,NULL,'0');
+
+/*Table structure for table `leaves` */
+
+DROP TABLE IF EXISTS `leaves`;
+
+CREATE TABLE `leaves` (
+  `_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `baby_id` bigint(20) NOT NULL,
+  `leave_date` date NOT NULL,
+  `lrrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `yxbz` char(1) NOT NULL DEFAULT 'Y',
+  `status` char(1) NOT NULL DEFAULT '0',
+  `leave_reason` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `leaves` */
 
 /*Table structure for table `orders` */
 
@@ -155,103 +182,21 @@ insert  into `orders`(`_id`,`baby_id`,`order_date`,`member_lx`,`course_count`,`c
 (16,6,'2018-01-18','1',-30,'2',3000.00,'2018-01-14 16:02:21','2018-01-14 16:02:21','Y'),
 (17,6,'2018-01-18','1',-30,'2',-3000.00,'2018-01-14 16:07:16','2018-01-14 16:07:16','Y');
 
-/*Table structure for table `test` */
+/*Table structure for table `sysconfig` */
 
-DROP TABLE IF EXISTS `test`;
+DROP TABLE IF EXISTS `sysconfig`;
 
-CREATE TABLE `test` (
-  `a` varchar(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `test` */
-
-insert  into `test`(`a`) values 
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a'),
-('a');
-
-/*Table structure for table `tt` */
-
-DROP TABLE IF EXISTS `tt`;
-
-CREATE TABLE `tt` (
-  `_id` bigint(20) NOT NULL DEFAULT '0',
-  `baby_name` varchar(32) NOT NULL,
-  `birthday` date NOT NULL,
-  `age` int(3) DEFAULT NULL,
-  `father` varchar(32) DEFAULT NULL,
-  `mather` varchar(32) DEFAULT NULL,
-  `grandpa` varchar(32) DEFAULT NULL,
-  `grandma` varchar(32) DEFAULT NULL,
-  `home_address` varchar(500) DEFAULT NULL,
-  `phone_no1` varchar(20) NOT NULL,
-  `phone_no2` varchar(20) DEFAULT NULL,
-  `case` varchar(750) DEFAULT NULL,
-  `allergy` varchar(750) DEFAULT NULL,
-  `hobby` varchar(100) DEFAULT NULL,
-  `character` varchar(100) DEFAULT NULL,
-  `member_lx` char(1) NOT NULL DEFAULT '0',
-  `init_count` int(3) NOT NULL,
-  `course_count` int(3) NOT NULL,
+CREATE TABLE `sysconfig` (
+  `_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `col_ms` varchar(200) NOT NULL,
+  `val` varchar(20) NOT NULL,
   `lrrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` char(1) NOT NULL DEFAULT '0',
-  `yxbz` char(1) NOT NULL DEFAULT 'Y'
+  `yxbz` char(1) NOT NULL DEFAULT 'Y',
+  PRIMARY KEY (`_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `tt` */
-
-insert  into `tt`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`,`grandma`,`home_address`,`phone_no1`,`phone_no2`,`case`,`allergy`,`hobby`,`character`,`member_lx`,`init_count`,`course_count`,`lrrq`,`xgrq`,`status`,`yxbz`) values 
-(2,'含韵','2016-06-15',2,NULL,'含苞',NULL,NULL,NULL,'12623119364',NULL,NULL,NULL,NULL,NULL,'2',90,90,'2018-01-13 14:19:32','2018-01-13 14:19:32','0','Y'),
-(3,'张建亚','2012-07-02',5,'张玉玺','韩亚巍','张菲菲','雅菲哦','重庆渝中区','12623113423',NULL,NULL,NULL,NULL,NULL,'3',180,180,'2018-01-13 14:21:00','2018-01-13 14:21:00','0','Y'),
-(5,'谭维','2013-03-01',4,'谭非','亚萨萨',NULL,NULL,'重庆贝贝','17823113423',NULL,NULL,NULL,NULL,NULL,'1',30,30,'2018-01-13 14:23:34','2018-01-13 14:23:34','0','Y'),
-(6,'刘毅非','2013-01-04',4,'刘爸爸','刘妈妈',NULL,NULL,'重庆南岸','15823123423',NULL,NULL,NULL,NULL,NULL,'1',7,10,'2018-01-13 14:25:34','2018-01-13 14:25:34','0','Y');
+/*Data for the table `sysconfig` */
 
 /*!50106 set global event_scheduler = 1*/;
 
@@ -261,7 +206,7 @@ insert  into `tt`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`
 
 DELIMITER $$
 
-/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `job_createCourseRecord_at_1000` ON SCHEDULE EVERY 1 MINUTE STARTS '2018-01-14 21:00:10' ON COMPLETION NOT PRESERVE ENABLE DO begin
+/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `job_createCourseRecord_at_1000` ON SCHEDULE EVERY 1 HOUR STARTS '2018-01-14 21:00:10' ON COMPLETION NOT PRESERVE ENABLE DO begin
 	    call p_createCourseRecord();  
 
 	end */$$
@@ -285,21 +230,13 @@ BEGIN
      babyId,
      course_bh,
      course_rq,
-     course_time,
-     baby_name,
-     father,
-     mather,
-     phone_no1
+     course_time
 )
 select
      bb.`_id` babyId,
      current_date() course_bh,
      current_date()course_rq,
-     current_date()　course_time,
-     bb.baby_name,
-     bb.father,
-     bb.mather,
-     bb.phone_no1
+     null course_time
 from
      babies bb
 where bb.yxbz = 'Y'

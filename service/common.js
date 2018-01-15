@@ -9,7 +9,7 @@ function replaceParams(querySql,param,paramText) {
     *
     * */
     var exp1 = new RegExp("\\[.*@" + paramText + "@.*\\]");
-    if (param == undefined || param == "") {
+    if (param == "" || param == undefined) {
         var sql1 = querySql.replace(exp1, '1=1');
         //console.log(sql1);
         return sql1;

@@ -2,14 +2,13 @@ var express = require('express');
 var mysql = require('mysql');
 var dbConfig = require('../sqlmap/mysqldb');
 var CourseSql = require('../sqlmap/coursesql');
-
 var Common = require('../service/common');
 var router = express.Router();
 var pool = mysql.createPool( dbConfig.mysql );
 
 /**
  *查询课程记录
- *
+ * status = '0'
  **/
 router.get('/list', function(req, res) {
     var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
@@ -18,9 +17,9 @@ router.get('/list', function(req, res) {
     var param = [offset,pageSize];
     var querySqlResult = CourseSql.queryAll;
     var querySqlCount = CourseSql.queryCount;
-    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name];
-    var params_final = ['course_rqq','course_rqz','baby_name'];
-    for( var i=0;i<3;i++) {
+    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'0'];
+    var params_final = ['course_rqq','course_rqz','baby_name','status'];
+    for( var i=0;i<4;i++) {
         querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
         querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
     }
@@ -59,6 +58,66 @@ router.get('/list', function(req, res) {
         });
     });
 });
+
+
+/**
+ *查询取消课程记录
+ * status ='1'
+ **/
+router.get('/cancel_list', function(req, res) {
+    var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
+    var pageSize = 2;
+    var offset = (parseInt(pageNum)-1)*pageSize;
+    var param = [offset,pageSize];
+    var querySqlResult = CourseSql.queryAll;
+    var querySqlCount = CourseSql.queryCount;
+    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'1'];
+    var params_final = ['course_rqq','course_rqz','baby_name','status'];
+    for( var i=0;i<4;i++) {
+        querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
+        querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
+    }
+    pool.getConnection(function(err, connection) {
+        connection.query(querySqlResult, param, function(err, courses) {
+            if(err){
+                res.render('course/cancel_list', {
+                    status:false,
+                    msg:err.toString(),
+                    active_url:'course/cancel_list'
+                });
+            }else {
+                connection.query(querySqlCount,param,function(err, result) {
+                    if(err){
+                        res.render('course/cancel_list', {
+                            status:false,
+                            msg:err.toString(),
+                            active_url:'course/cancel_list'
+                        });
+                    }else {
+                        res.render('course/cancel_list', {
+                            status:true,
+                            courses:courses,
+                            course_rqq:req.query.course_rqq,
+                            course_rqz:req.query.course_rqz,
+                            baby_name:req.query.baby_name,
+                            pageNum:pageNum,
+                            pageTotal:Math.ceil(result[0].cnt/pageSize),
+                            active_url:'course/cancel_list',
+                            offset:offset
+                        });
+                    }
+                    connection.release();
+                });
+            }
+        });
+    });
+});
+
+
+
+
+
+
 
 
 

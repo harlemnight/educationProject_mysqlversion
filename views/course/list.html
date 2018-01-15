@@ -42,7 +42,6 @@
                     <tr>
                         <th style="width:4%;">序号</th>
                         <th style="width:11%;">课程日期</th>
-                        <th style="width:10%;">课程时段</th>
                         <th style="width:12%;">姓名</th>
                         <th style="width:12%;">父亲</th>
                         <th style="width:12%;">母亲</th>
@@ -56,19 +55,20 @@
                         <tr>
                             <td><%=index+1+parseInt(offset) %></td>
                             <td><%= toLocalDate(course.course_rq)  %></td>
-                            <td><%= course.course_time %></td>
                             <td><%= course.baby_name %></td>
                             <td><%= course.father %></td>
                             <td><%= course.mather %></td>
                             <td><%= course.phone_no1 %></td>
                             <td><a href="/course/delete?id=<%=course._id %>"
+                                   onclick="if(confirm('确定作废?')==false)return false;">添加</a>
+                                <a href="/course/delete?id=<%=course._id %>"
                                        onclick="if(confirm('确定作废?')==false)return false;">作废</a></td>
                         </tr>
                         <% }) %>
                         </tbody>
                     <% } %>
                     <tr>
-                        <td></td><td></td><td></td><td></td><td></td>
+                        <td></td><td></td><td></td><td></td>
                         <td align="right" colspan="3">
                         <a href="javascript:void(0);" onclick="forward(-1)">上一页</a>
                         |

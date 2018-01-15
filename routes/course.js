@@ -1,59 +1,63 @@
 var express = require('express');
-var mongoose = require('mongoose');
-var dbConfig = require('../models/dbConfig');
-var Course =  require('../models/course').course;
-var Baby =  require('../models/baby').baby;
+var mysql = require('mysql');
+var dbConfig = require('../sqlmap/mysqldb');
+var CourseSql = require('../sqlmap/coursesql');
+
+var Common = require('../service/common');
 var router = express.Router();
-mongoose.connect(dbConfig.dblink,dbConfig.userMongoClent);
+var pool = mysql.createPool( dbConfig.mysql );
 
-
+/**
+ *查询课程记录
+ *
+ **/
 router.get('/list', function(req, res) {
-    var baby_name = req.query.baby_name;
-    var course_rqq = req.query.course_rqq;
-    var course_rqz = req.query.course_rqz;
-    var num = req.query.page;
-    var pageNum = 0;
-    var pageSize = 20;
-    if ( num == undefined || num <= 1) {
-        pageNum = 1;
-    }else {
-        pageNum = num;
-    }
+    var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
+    var pageSize = 2;
     var offset = (parseInt(pageNum)-1)*pageSize;
-    var condition  = {yxbz:'Y'};
-    if (!(baby_name==undefined||baby_name=="")) {
-        condition.baby_name = baby_name ;
+    var param = [offset,pageSize];
+    var querySqlResult = CourseSql.queryAll;
+    var querySqlCount = CourseSql.queryCount;
+    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name];
+    var params_final = ['course_rqq','course_rqz','baby_name'];
+    for( var i=0;i<3;i++) {
+        querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
+        querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
     }
-    if(!(course_rqq==undefined||course_rqq=="") && !(course_rqz==undefined||course_rqz=="")) {
-        condition.course_rq = {$gte: course_rqq,$lte: course_rqz};
-    }else if (!(course_rqq==undefined||course_rqq=="")) {
-        condition.course_rq = {$gte: course_rqq};
-    }else if (!(course_rqz==undefined||course_rqz==""))  {
-        condition.course_rq = {$lte: course_rqz};
-    };
-
-    Course.find(condition,//这里是查询条件如果没有条件就是查询所有的数据，此参数可不传递  name: /周/
-            function (err, cs) {
-                if (err) {
-                    res.render('course/list', { msg:err.toString()});
-                }
-                else {
-                        Course.count(condition,
-                                        function(err,count){
-                                        var pageTotal =Math.ceil(count/pageSize);
-                                        res.render('course/list', { courses:cs,
-                                                                    course_rqq:course_rqq,
-                                                                    course_rqz:course_rqz,
-                                                                    baby_name:baby_name,
-                                                                    pageNum:pageNum,
-                                                                    pageTotal:pageTotal,
-                                                                    offset:offset,
-                                            active_url:'course/list'
-                                                                    });
-                                }
-                    )
-                }
-            }).limit(pageSize).skip(offset).sort({'course_rq':-1});
+    pool.getConnection(function(err, connection) {
+        connection.query(querySqlResult, param, function(err, courses) {
+            if(err){
+                res.render('course/list', {
+                    status:false,
+                    msg:err.toString(),
+                    active_url:'course/list'
+                });
+            }else {
+                connection.query(querySqlCount,param,function(err, result) {
+                    if(err){
+                        res.render('course/list', {
+                            status:false,
+                            msg:err.toString(),
+                            active_url:'course/list'
+                        });
+                    }else {
+                        res.render('course/list', {
+                            status:true,
+                            courses:courses,
+                            course_rqq:req.query.course_rqq,
+                            course_rqz:req.query.course_rqz,
+                            baby_name:req.query.baby_name,
+                            pageNum:pageNum,
+                            pageTotal:Math.ceil(result[0].cnt/pageSize),
+                            active_url:'course/list',
+                            offset:offset
+                        });
+                    }
+                    connection.release();
+                });
+            }
+        });
+    });
 });
 
 

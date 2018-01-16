@@ -4,9 +4,9 @@
     //alert(moment(<= baby.birthday>).format('YYYY-MM-DD'));
 </script>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h2 class="sub-header">课程取消记录</h2>
+    <h2 class="sub-header">课程预约</h2>
 
-        <form id="course_form" name="course_form" class="form-inline"  action="/course/cancel_list" method="get"  >
+        <form id="course_form" name="course_form" class="form-inline"  action="/course/appoint_list" method="get"  >
             <div class="form-group">
                 <div class="input-group date form_date" data-date-format="yyyy-mm-dd" >
                     <input type="text" class="form-control" name="course_rqq"
@@ -94,10 +94,38 @@
             num =0;
         }
         var page = (next==0)?num:parseInt('<%=pageNum%>')+ next;
-            window.location.href='/course/cancel_list?page='+page+'&baby_name='+$('#baby_name').val()+
+            window.location.href='/course/appoint_list?page='+page+'&baby_name='+$('#baby_name').val()+
                 '&course_rqq='+$('#course_rqq').val()+
                 '&course_rqz='+$('#course_rqz').val();
     };
+
+    function formCheck(){
+        /*
+        var rqz = $('#course_rqz').val();
+        var rqq = $('#course_rqq').val();
+        var baby_name = $("#baby_name").val();
+        if (baby_name.length==0) {
+            if ( (rqq.length>0 && rqz.length==0) || (rqz.length>0 && rqq.length==0)){
+                 alert("课程日期起止必须同时选择");
+            }else {
+                if (DateDiff(rqz,rqq) > 30 ) {
+                    alert("起止日期建议不超过30天");
+                }
+            }
+        }
+        */
+    }
+
+    function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式
+        var  aDate,  oDate1,  oDate2,  iDays
+        aDate  =  sDate1.split("-")
+        oDate1 = new Date(aDate[0] , aDate[1] ,aDate[2]) //转换为12-18-2006格式
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[0] , aDate[1] , aDate[2])
+        iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数
+        return  iDays;
+    }
+
 
     $('.form_date').datetimepicker({
         language: 'zh-CN',

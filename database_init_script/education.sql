@@ -16,23 +16,6 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`education` /*!40100 DEFAULT CHARACTER S
 
 USE `education`;
 
-/*Table structure for table `appointments` */
-
-DROP TABLE IF EXISTS `appointments`;
-
-CREATE TABLE `appointments` (
-  `_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `baby_id` bigint(20) NOT NULL,
-  `appoint_date` date NOT NULL,
-  `lrrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `yxbz` char(1) NOT NULL DEFAULT 'Y',
-  `status` char(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `appointments` */
-
 /*Table structure for table `babies` */
 
 DROP TABLE IF EXISTS `babies`;
@@ -88,16 +71,22 @@ CREATE TABLE `courses` (
   `yxbz` char(1) NOT NULL DEFAULT 'Y',
   `status` char(1) NOT NULL DEFAULT '0',
   `bz` varchar(500) DEFAULT NULL,
+  `lx` char(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
 
 /*Data for the table `courses` */
 
-insert  into `courses`(`_id`,`babyId`,`course_bh`,`course_rq`,`course_time`,`lrrq`,`xgrq`,`yxbz`,`status`,`bz`) values 
-(64,2,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL),
-(65,3,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL),
-(66,5,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL),
-(67,6,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL);
+insert  into `courses`(`_id`,`babyId`,`course_bh`,`course_rq`,`course_time`,`lrrq`,`xgrq`,`yxbz`,`status`,`bz`,`lx`) values 
+(64,2,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL,'0'),
+(65,3,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL,'0'),
+(66,5,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL,'0'),
+(67,6,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','1',NULL,'0'),
+(92,6,'2018-01-20','2018-01-20',NULL,'2018-01-16 12:13:00','2018-01-16 12:13:00','Y','2',NULL,'1'),
+(121,2,'2018-01-16','2018-01-16',NULL,'2018-01-16 17:00:10','2018-01-16 17:00:10','Y','0',NULL,'0'),
+(122,3,'2018-01-16','2018-01-16',NULL,'2018-01-16 17:00:10','2018-01-16 17:00:10','Y','0',NULL,'0'),
+(123,5,'2018-01-16','2018-01-16',NULL,'2018-01-16 17:00:10','2018-01-16 17:00:10','Y','0',NULL,'0'),
+(124,6,'2018-01-16','2018-01-16',NULL,'2018-01-16 17:00:10','2018-01-16 17:00:10','Y','0',NULL,'0');
 
 /*Table structure for table `employees` */
 
@@ -128,24 +117,6 @@ insert  into `employees`(`_id`,`employee_name`,`password`,`age`,`email`,`home_ad
 (2,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 22:40:32','2018-01-10 22:40:32','Y',NULL,NULL,'0'),
 (3,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 23:12:17','2018-01-10 23:12:17','Y',NULL,NULL,'0'),
 (4,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 23:40:03','2018-01-10 23:40:03','Y',NULL,NULL,'0');
-
-/*Table structure for table `leaves` */
-
-DROP TABLE IF EXISTS `leaves`;
-
-CREATE TABLE `leaves` (
-  `_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `baby_id` bigint(20) NOT NULL,
-  `leave_date` date NOT NULL,
-  `lrrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `yxbz` char(1) NOT NULL DEFAULT 'Y',
-  `status` char(1) NOT NULL DEFAULT '0',
-  `leave_reason` varchar(500) DEFAULT NULL,
-  PRIMARY KEY (`_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `leaves` */
 
 /*Table structure for table `orders` */
 

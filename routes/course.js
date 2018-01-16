@@ -2,6 +2,7 @@ var express = require('express');
 var mysql = require('mysql');
 var dbConfig = require('../sqlmap/mysqldb');
 var CourseSql = require('../sqlmap/coursesql');
+var BabySql = require('../sqlmap/babysql');
 var Common = require('../service/common');
 var router = express.Router();
 var pool = mysql.createPool( dbConfig.mysql );
@@ -17,9 +18,9 @@ router.get('/list', function(req, res) {
     var param = [offset,pageSize];
     var querySqlResult = CourseSql.queryAll;
     var querySqlCount = CourseSql.queryCount;
-    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'0'];
-    var params_final = ['course_rqq','course_rqz','baby_name','status'];
-    for( var i=0;i<4;i++) {
+    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'0',0];
+    var params_final = ['course_rqq','course_rqz','baby_name','status','lx'];
+    for( var i=0;i<5;i++) {
         querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
         querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
     }
@@ -71,9 +72,9 @@ router.get('/cancel_list', function(req, res) {
     var param = [offset,pageSize];
     var querySqlResult = CourseSql.queryAll;
     var querySqlCount = CourseSql.queryCount;
-    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'1'];
-    var params_final = ['course_rqq','course_rqz','baby_name','status'];
-    for( var i=0;i<4;i++) {
+    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'1',0];
+    var params_final = ['course_rqq','course_rqz','baby_name','status','lx'];
+    for( var i=0;i<5;i++) {
         querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
         querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
     }
@@ -115,7 +116,115 @@ router.get('/cancel_list', function(req, res) {
 
 
 
+/**
+ *查询预约课程记录
+ * status ='3' lx=1
+ **/
+router.get('/appoint_list', function(req, res) {
+    var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
+    var pageSize = 2;
+    var offset = (parseInt(pageNum)-1)*pageSize;
+    var param = [offset,pageSize];
+    var querySqlResult = CourseSql.queryAll;
+    var querySqlCount = CourseSql.queryCount;
+    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,0,'1'];
+    var params_final = ['course_rqq','course_rqz','baby_name','status','lx'];
+    for( var i=0;i<5;i++) {
+        querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
+        querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
+    }
+    pool.getConnection(function(err, connection) {
+        connection.query(querySqlResult, param, function(err, courses) {
+            if(err){
+                res.render('course/appoint_list', {
+                    status:false,
+                    msg:err.toString(),
+                    active_url:'course/appoint_list'
+                });
+            }else {
+                connection.query(querySqlCount,param,function(err, result) {
+                    if(err){
+                        res.render('course/appoint_list', {
+                            status:false,
+                            msg:err.toString(),
+                            active_url:'course/appoint_list'
+                        });
+                    }else {
+                        res.render('course/appoint_list', {
+                            status:true,
+                            courses:courses,
+                            course_rqq:req.query.course_rqq,
+                            course_rqz:req.query.course_rqz,
+                            baby_name:req.query.baby_name,
+                            pageNum:pageNum,
+                            pageTotal:Math.ceil(result[0].cnt/pageSize),
+                            active_url:'course/appoint_list',
+                            offset:offset
+                        });
+                    }
+                    connection.release();
+                });
+            }
+        });
+    });
+});
 
+
+
+/**
+ *查询剩余课程提醒
+ **/
+/*
+* 宝宝列表
+* */
+router.get('/last_list', function(req, res) {
+    var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
+    var pageSize = 2;
+    var offset = (parseInt(pageNum)-1)*pageSize;
+    var param = [offset,pageSize];
+    var querySqlResult = CourseSql.queryBabyExpire;
+    var querySqlCount = CourseSql.queryBabyExpireCount;
+    var course_count =  '7';
+    var params_var = [course_count,req.query.searchParams];
+    var params_final = ['course_count','baby_name'];
+    for( var i=0;i<2;i++) {
+        querySqlResult = Common.replaceParams(querySqlResult, params_var[i], params_final[i]);
+        querySqlCount = Common.replaceParams(querySqlCount, params_var[i], params_final[i]);
+    }
+    pool.getConnection(function(err, connection) {
+        connection.query(querySqlResult, param, function(err, babies) {
+            if(err){
+                res.render('course/last_list', {
+                    status:false,
+                    msg:err.toString(),
+                    active_url:'course/last_list'
+                });
+            }else {
+                connection.query(querySqlCount,param,function(err, result) {
+                    if(err){
+                        res.render('course/last_list', {
+                            status:false,
+                            msg:err.toString(),
+                            active_url:'course/last_list'
+                        });
+                    }else {
+                        var pageTotal =Math.ceil(result[0].cnt/pageSize);
+                        res.render('course/last_list', {
+                            status:true,
+                            babies:babies,
+                            searchParams:req.query.searchParams,
+                            pageNum:pageNum,
+                            pageTotal:pageTotal,
+                            active_url:'course/last_list',
+                            offset:offset
+                        });
+                    }
+                    connection.release();
+                });
+            }
+        });
+    });
+});
 
 
 

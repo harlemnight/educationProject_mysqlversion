@@ -184,13 +184,14 @@ router.get('/last_list', function(req, res) {
     var param = [offset,pageSize];
     var querySqlResult = CourseSql.queryBabyExpire;
     var querySqlCount = CourseSql.queryBabyExpireCount;
-    var course_count =  '7';
+    var course_count =  7;
     var params_var = [course_count,req.query.searchParams];
     var params_final = ['course_count','baby_name'];
     for( var i=0;i<2;i++) {
         querySqlResult = Common.replaceParams(querySqlResult, params_var[i], params_final[i]);
         querySqlCount = Common.replaceParams(querySqlCount, params_var[i], params_final[i]);
     }
+    console.log(querySqlResult);
     pool.getConnection(function(err, connection) {
         connection.query(querySqlResult, param, function(err, babies) {
             if(err){

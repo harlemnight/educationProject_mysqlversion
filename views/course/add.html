@@ -1,28 +1,56 @@
 <% include ../header.html %>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h1 class="page-header">课程预约</h1>
-    <div class="row placeholders">
-        <form id="course_form" name="course_form" class="form-inline"
-                method="post" action="/course/add" onsubmit="return formCheck()">
-            <div class="form-group">
+    <h1 class="page-header">课程<%=locals.title %></h1>
+
+    <form class="form-horizontal" id="course_form" method="post" action="/course/add" onsubmit="return formCheck()">
+        <div class="form-group">
+            <label for="baby_name" class="col-sm-2 control-label">姓名</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="baby_name"
+                       id="baby_name" placeholder="姓名"
+                       value="<% if(locals.baby_name) {%><%=baby_name%><%}%>"
+                       required
+                       readonly
+                >
+            </div>
+        </div>
+        <input type="hidden" class="form-control" name="baby_id"
+               id="baby_id"
+               value="<% if(locals.baby_id) {%><%=baby_id%><%}%>"
+        >
+        <input type="hidden" class="form-control" name="lx"
+               id="lx"
+               value="<% if(locals.lx) {%><%=lx%><%}%>"
+        >
+        <div class="form-group">
+            <label for="course_rq"  class="col-sm-2 control-label"><%=locals.title %>日期</label>
+            <div class="col-sm-10">
                 <div class="input-group date form_date" data-date-format="yyyy-mm-dd" >
                     <input type="text" class="form-control" name="course_rq"
-                           id = "course_rq" placeholder="课程日期"
-                           value="<%=locals.course_rq %>"
+                           id = "course_rq"
+                           value="<% if(locals.course_rq) {%><%=toLocalDate(course_rq) %><%}%>"
                            readonly
                     >
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 </div>
             </div>
-            <div class="form-group">
+        </div>
+
+            <!--div class="form-group">
                 <select class="form-control"  id="course_time"  name="course_time"  required >
                     <option  ></option>
                     <option value="上午"  <% if(locals.course_time==="上午") {%> selected  <% } %> >上午</option>
                     <option value="下午"  <% if(locals.course_time==="下午") {%> selected  <% } %> >下午</option>
                 </select>
+            </div-->
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">保存<%=locals.title %></button>
             </div>
-            <button type="submit" class="btn btn-default">保存记录卡</button>
+        </div>
+
 
             <% if(locals.msg) { %>
                 <%if(locals.status) { %>
@@ -38,6 +66,7 @@
 
 
     </div>
+     <!--
             <div class="table-responsive" >
                 <table class="table table-striped">
                     <thead>
@@ -50,7 +79,7 @@
                         <th style="width:10%;"><input type="checkbox" onclick="selectAll(this);"  >全选</th>
                     </tr>
                     </thead>
-                    <% if (babies.length) { %>
+                    <% if (locals.babies) { %>
                     <tbody>
                     <% babies.forEach(function(baby,index){ %>
                     <tr>
@@ -69,18 +98,12 @@
                     <tr>
                         <td></td><td></td><td></td>
                         <td align="right" colspan="3">
-                            <a href="javascript:void(0);" onclick="forward(-1)">上一页</a>
-                            |
-                            <%=parseInt(pageNum) %>
-                            |
-                            <a href="javascript:void(0);" onclick="forward(1)">下一页</a>
-                            共<%=pageTotal %>页
-                            <input type="text" id="pageNum" style="width:30px;"/>
-                            <a href="javascript:void(0);" onclick="forward(0)">跳转</a>
+
                         </td>
                     </tr>
                 </table>
             </div>
+             -->
         </form>
 
 </div>
@@ -91,21 +114,14 @@
     function selectAll(checkbox) {
     $('input[type=checkbox]').prop('checked', $(checkbox).prop('checked'));
     };
-    function forward(next){
-        var num = $('#pageNum').val();
-        if (isNaN(num)){
-            num =0;
-        }
-        var page = (next==0)?num:parseInt('<%=pageNum%>')+ next;
-        window.location.href='/course/add?page='+page+'&course_time='+$('#course_time').val()+
-            '&course_rq='+$('#course_rq').val();
-    };
+
 
     function formCheck(){
-        if($('input[type=checkbox]').is(":checked")==false){
+        /*if($('input[type=checkbox]').is(":checked")==false){
             alert("请勾选签到人员");
             return false;
         }
+        */
         if ( $('#course_rq').val().length==0){
             alert("请输入课程日期");
             return false;

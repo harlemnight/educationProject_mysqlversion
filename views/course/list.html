@@ -4,7 +4,7 @@
     //alert(moment(<= baby.birthday>).format('YYYY-MM-DD'));
 </script>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h2 class="sub-header">课程记录</h2>
+    <h2 class="sub-header">课程签到记录</h2>
 
         <form id="course_form" name="course_form" class="form-inline"  action="/course/list" method="get"  >
             <div class="form-group">
@@ -60,9 +60,9 @@
                             <td><%= course.mather %></td>
                             <td><%= course.phone_no1 %></td>
                             <td><a href="/course/add?id=<%=course._id %>"
-                                   onclick="if(confirm('确定添加?')==false)return false;">添加</a>
+                                   onclick="if(confirm('确定添加?')==false)return false;">添加课程</a>
                                 <a href="/course/cancel?id=<%=course._id %>"
-                                       onclick="if(confirm('确定取消?')==false)return false;">取消</a></td>
+                                       onclick="if(confirm('确定取消?')==false)return false;">取消课程</a></td>
                         </tr>
                         <% }) %>
                         </tbody>

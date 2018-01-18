@@ -6,9 +6,10 @@ var CourseSql = {
                 'course_rq,' +
                 'course_time,' +
                 'status,' +
-                'bz' +
+                'bz,' +
+                'lx' +
                 ') ' +
-                'values(?,str_to_date(?,?,\'%Y-%m-%d\'),?,?,?)',
+                'values(?,str_to_date(?,\'%Y-%m-%d\'),?,?,?,?,?)',
     queryAll :  ' select es.course_rq,\n' +
                 '\tbb.baby_name,\n' +
                 '\tbb.father,\n' +

@@ -118,7 +118,7 @@ router.get('/cancel_list', function(req, res) {
 
 /**
  *查询预约课程记录
- * status ='3' lx=1
+ * lx=1
  **/
 router.get('/appoint_list', function(req, res) {
     var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
@@ -231,6 +231,11 @@ router.get('/last_list', function(req, res) {
 
 
 
+
+
+/*
+* 课程取消
+* */
 router.get('/delete',function(req, res) {
     var course = {yxbz:'N',xgrq: Date.now()};
     var conditions = {_id:req.query.id};
@@ -255,43 +260,60 @@ router.get('/delete',function(req, res) {
 });
 
 
+/**
+ *
+ *课程签到 ，status =0 lx =0
+ * 预约 添加记录 status =2 lx =1
+ */
 router.get('/add',function(req, res) {
-
-    var num = req.query.page;
-    var pageNum = 0;
-    var pageSize = 20;
-    if ( num == undefined || num <= 1) {
-        pageNum = 1;
-    }else {
-        pageNum = num;
-    }
-    var offset = (parseInt(pageNum)-1)*pageSize;
-    var condition = {yxbz:'Y',init_count:{$gt: 0}};
-    Baby.find(condition,//这里是查询条件如果没有条件就是查询所有的数据，此参数可不传递  name: /周/
-        function (err, babies) {
-            if (err) {
-                res.render('course/add', {status:false,msg:err.toString()});
-            }
-            else {
-                Baby.count(condition,function(err,count) {
-                    var pageTotal = Math.ceil(count / pageSize);
-                    res.render('course/add', {  status: true,
-                                                babies: babies,
-                                                pageNum: pageNum,
-                                                pageTotal: pageTotal,
-                                                course_rq : req.query.course_rq,
-                                                course_time : req.query.course_time,
-                                                offset:offset,
-                        active_url:'course/add'
-                                             });
-                })
-            }
-        }).limit(pageSize).skip(offset).sort({'lrrq':-1});
-
+        var title = req.query.lx=='0'?'签到':'预约';
+          res.render('course/add', {
+                                        status: true,
+                                        baby_id:req.query.baby_id,
+                                        baby_name:req.query.baby_name,
+                                        course_rq : req.query.course_rq,
+                                        lx : req.query.lx,
+                                        title:title
+           });
 });
 
 
+
 router.post('/add', function(req, res) {
+    var param = [
+        req.body.baby_id==""?null:req.body.baby_id,
+        req.body.course_rq==""?null:req.body.course_rq,
+        req.body.course_rq==""?null:req.body.course_rq,
+        req.body.course_rq==""?null:req.body.course_rq,
+        req.body.status==""?null:req.body.status,
+        null,
+        req.body.lx==""?null:req.body.lx
+    ];
+
+    pool.getConnection(function(err, connection) {
+        connection.query(CourseSql.insert, param, function(err, result) {
+            if(err){
+                var title = req.body.lx=='0'?'签到':'预约';
+                res.render('course/add', {
+                    baby_id:req.body.baby_id,
+                    baby_name:req.body.baby_name,
+                    course_rq : req.body.course_rq,
+                    lx : req.body.lx,
+                    title:title,
+                    msg:err.toString()
+                });
+            }else {
+                if (req.body.lx=='0'){
+                    res.redirect('/course/list');
+                } else {
+                    res.redirect('/course/appoint_list');
+                }
+
+            }
+            connection.release();
+        });
+    });
+
     Baby.find({_id:{$in: req.body.baby_id}},function(err,baby_docs){
         if(err){
             res.render('course/add', { status:false,msg:err.toString()});

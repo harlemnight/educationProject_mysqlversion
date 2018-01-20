@@ -26,7 +26,8 @@
                     <th style="width:8%;">剩余天数</th>
                     <th style="width:10%;">联系电话1</th>
                     <th style="width:1%;" ></th>
-                    <th style="width:20%;" ><a href="/baby/add">添加</a></th>
+                    <th style="width:8%;" ><a href="/baby/add">添加</a></th>
+                    <th style="width:12%;" >课程管理</a></th>
                 </tr>
                 </thead>
                 <% if (status) { %>
@@ -50,7 +51,7 @@
                             <td>
                                 <a href="/course/add?lx=0&id=<%=baby._id %>&baby_name=<%= baby.baby_name %>"
                                    >课程签到</a>
-                                <a href="/course/add?lx=1&id=<%=baby._id %>&baby_name=<%= baby.baby_name %>"
+                                <a href="/course/add?lx=2&id=<%=baby._id %>&baby_name=<%= baby.baby_name %>"
                                    >课程预约</a>
                             </td>
                         </tr>

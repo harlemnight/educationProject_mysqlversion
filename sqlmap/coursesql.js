@@ -1,7 +1,7 @@
 var CourseSql = {
     insert :    'insert into courses ' +
                 '(' +
-                'baby_id,' +
+                'babyId,' +
                 'course_bh,' +
                 'course_rq,' +
                 'course_time,' +

@@ -127,7 +127,7 @@ router.get('/appoint_list', function(req, res) {
     var param = [offset,pageSize];
     var querySqlResult = CourseSql.queryAll;
     var querySqlCount = CourseSql.queryCount;
-    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,0,'1'];
+    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,0,'2'];
     var params_final = ['course_rqq','course_rqz','baby_name','status','lx'];
     for( var i=0;i<5;i++) {
         querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
@@ -269,7 +269,7 @@ router.get('/add',function(req, res) {
         var title = req.query.lx=='0'?'签到':'预约';
           res.render('course/add', {
                                         status: true,
-                                        baby_id:req.query.baby_id,
+                                        baby_id:req.query.id,
                                         baby_name:req.query.baby_name,
                                         course_rq : req.query.course_rq,
                                         lx : req.query.lx,
@@ -285,7 +285,7 @@ router.post('/add', function(req, res) {
         req.body.course_rq==""?null:req.body.course_rq,
         req.body.course_rq==""?null:req.body.course_rq,
         req.body.course_rq==""?null:req.body.course_rq,
-        req.body.status==""?null:req.body.status,
+        req.body.lx=='0'?'0':'2',
         null,
         req.body.lx==""?null:req.body.lx
     ];
@@ -312,71 +312,6 @@ router.post('/add', function(req, res) {
             }
             connection.release();
         });
-    });
-
-    Baby.find({_id:{$in: req.body.baby_id}},function(err,baby_docs){
-        if(err){
-            res.render('course/add', { status:false,msg:err.toString()});
-        }else if(!baby_docs){
-            res.render('course/add', { status:false,msg: '没有获取到宝贝信息'});
-        }else{
-            var course_docs = [baby_docs.length];
-            for ( var i = 0;i<baby_docs.length;i++) {
-                course_docs[i] = new Course(
-                    {
-                        babyId:baby_docs[i]._id,
-                        course_bh: req.body.course_rq+''+req.body.course_time,
-                        course_rq: req.body.course_rq,
-                        course_time:req.body.course_time,
-                        baby_name:baby_docs[i].baby_name,
-                        father:baby_docs[i].father,
-                        mather:baby_docs[i].mather,
-                        phone_no1:baby_docs[i].phone_no1
-                    }
-                );
-            };
-
-            //这里由于采用非内嵌方式存储宝贝签到信息（多个文档），因此无法同时满足
-            //不存在则写入，存在则更新
-            //因此comment this code
-            //采用内嵌数组的方式来存储宝贝签到信息
-            Course.collection.insert(course_docs,function (err, docs) {
-                    if (err) {
-                        res.render('course/add', {status:false,msg:err.toString()});
-                    } else {
-                        Baby.update({_id:{$in: req.body.baby_id}},{$inc:{init_count:-1}},{multi:true} ,function(err) {
-                            if (err) {
-                            }else {
-                                var pageNum = 1;
-                                var pageSize = 20;
-                                var offset = (pageNum-1)*pageSize;
-                                Baby.find({yxbz:'Y',init_count:{$gt: 0}},//这里是查询条件如果没有条件就是查询所有的数据，此参数可不传递  name: /周/
-                                    function (err, babies) {
-                                        if (err) {
-                                            res.render('course/add', { status:false,msg:err.toString()});
-                                        }
-                                        else {
-                                            Baby.count({yxbz:'Y',init_count:{$gt: 0}},function(err,count) {
-                                                var pageTotal = Math.ceil(count / pageSize);
-                                                res.render('course/add', {  status:true,
-                                                    msg:'保存记录卡成功',
-                                                    babies:babies,
-                                                    pageNum:pageNum,
-                                                    pageTotal: pageTotal,
-                                                    course_rq : req.body.course_rq,
-                                                    course_time : req.body.course_time,
-                                                    offset:offset,
-                                                    active_url:'course/add'
-                                                });
-                                            })
-                                        }
-                                    }).limit(pageSize).skip(offset).sort({'lrrq':-1});
-                            }
-                        });
-                            }
-                }
-            );
-        }
     });
 
 });

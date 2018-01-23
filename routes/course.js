@@ -2,14 +2,13 @@ var express = require('express');
 var mysql = require('mysql');
 var dbConfig = require('../sqlmap/mysqldb');
 var CourseSql = require('../sqlmap/coursesql');
-var BabySql = require('../sqlmap/babysql');
 var Common = require('../service/common');
 var router = express.Router();
 var pool = mysql.createPool( dbConfig.mysql );
 
 /**
  *查询课程记录
- * status = '0'
+ * status = '0' and yxbz = 'Y'
  **/
 router.get('/list', function(req, res) {
     var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
@@ -18,9 +17,9 @@ router.get('/list', function(req, res) {
     var param = [offset,pageSize];
     var querySqlResult = CourseSql.queryAll;
     var querySqlCount = CourseSql.queryCount;
-    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'0',0];
-    var params_final = ['course_rqq','course_rqz','baby_name','status','lx'];
-    for( var i=0;i<5;i++) {
+    var params_var = ['Y',req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'0',0];
+    var params_final = ['yxbz','course_rqq','course_rqz','baby_name','status','lx'];
+    for( var i=0;i<6;i++) {
         querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
         querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
     }
@@ -63,7 +62,8 @@ router.get('/list', function(req, res) {
 
 /**
  *查询取消课程记录
- * status ='1'
+ * status ='0'
+ * yxbz = 'N'
  **/
 router.get('/cancel_list', function(req, res) {
     var pageNum = ( req.query.page == undefined || req.query.page <= 1)?1:req.query.page;
@@ -72,9 +72,9 @@ router.get('/cancel_list', function(req, res) {
     var param = [offset,pageSize];
     var querySqlResult = CourseSql.queryAll;
     var querySqlCount = CourseSql.queryCount;
-    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'1',0];
-    var params_final = ['course_rqq','course_rqz','baby_name','status','lx'];
-    for( var i=0;i<5;i++) {
+    var params_var = ['N',req.query.course_rqq,req.query.course_rqz,req.query.baby_name,'0',0];
+    var params_final = ['yxbz','course_rqq','course_rqz','baby_name','status','lx'];
+    for( var i=0;i<6;i++) {
         querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
         querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
     }
@@ -114,8 +114,6 @@ router.get('/cancel_list', function(req, res) {
     });
 });
 
-
-
 /**
  *查询预约课程记录
  * lx=1
@@ -127,9 +125,9 @@ router.get('/appoint_list', function(req, res) {
     var param = [offset,pageSize];
     var querySqlResult = CourseSql.queryAll;
     var querySqlCount = CourseSql.queryCount;
-    var params_var = [req.query.course_rqq,req.query.course_rqz,req.query.baby_name,0,'2'];
-    var params_final = ['course_rqq','course_rqz','baby_name','status','lx'];
-    for( var i=0;i<5;i++) {
+    var params_var = ['Y',req.query.course_rqq,req.query.course_rqz,req.query.baby_name,0,'2'];
+    var params_final = ['yxbz','course_rqq','course_rqz','baby_name','status','lx'];
+    for( var i=0;i<6;i++) {
         querySqlResult = Common.replaceParams(querySqlResult,params_var[i],params_final[i]);
         querySqlCount = Common.replaceParams(querySqlCount,params_var[i],params_final[i]);
     }
@@ -226,44 +224,10 @@ router.get('/last_list', function(req, res) {
         });
     });
 });
-
-
-
-
-
-
-
-/*
-* 课程取消
-* */
-router.get('/delete',function(req, res) {
-    var course = {yxbz:'N',xgrq: Date.now()};
-    var conditions = {_id:req.query.id};
-    var update     = {$set : course};
-        Course.findOneAndUpdate(conditions,update,function(err,cs_doc) {
-            if (err) {
-                res.render('course/list', { status:false,msg:err.toString()});
-            }else if(!cs_doc) {
-                res.render('course/list', { status:false,msg:'查找课程失败'});
-            }else {
-                    var conditions = {_id:cs_doc.babyId};
-                    var update     = {$set : {xgrq: Date.now()} ,$inc:{init_count:1}};
-                        Baby.update(conditions,update,function(err) {
-                            if (err) {
-                                res.render('course/list', { status:false,msg:'更新宝贝信息失败'});
-                            }else {
-                                res.redirect('/course/list');
-                            }
-                        });
-            }
-        });
-});
-
-
 /**
  *
  *课程签到 ，status =0 lx =0
- * 预约 添加记录 status =2 lx =1
+ * 预约 添加记录 status =2 lx =2
  */
 router.get('/add',function(req, res) {
         var title = req.query.lx=='0'?'签到':'预约';
@@ -316,9 +280,33 @@ router.post('/add', function(req, res) {
 
 });
 
-
 /*
- * 剩余课程查询
- */
-router.get('/last',function(req, res) {res.render('course/last', { });});
+* 课程取消
+* 只针对已经签到的课程进行取消
+* status = 0 的
+* update status = '1'
+* */
+router.get('/delete',function(req, res) {
+    var course = {yxbz:'N',xgrq: Date.now()};
+    var conditions = {_id:req.query.id};
+    var update     = {$set : course};
+    Course.findOneAndUpdate(conditions,update,function(err,cs_doc) {
+        if (err) {
+            res.render('course/list', { status:false,msg:err.toString()});
+        }else if(!cs_doc) {
+            res.render('course/list', { status:false,msg:'查找课程失败'});
+        }else {
+            var conditions = {_id:cs_doc.babyId};
+            var update     = {$set : {xgrq: Date.now()} ,$inc:{init_count:1}};
+            Baby.update(conditions,update,function(err) {
+                if (err) {
+                    res.render('course/list', { status:false,msg:'更新宝贝信息失败'});
+                }else {
+                    res.redirect('/course/list');
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;

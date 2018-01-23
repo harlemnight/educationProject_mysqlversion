@@ -21,7 +21,7 @@ var CourseSql = {
             '  from courses es,\n' +
                 '\t babies bb\n' +
                 'where es.babyId = bb._id\n' +
-                '  and es.yxbz = \'Y\'\n' +
+                '  and [es.yxbz = @yxbz@]\n' +
                 '     and [es.course_rq >= str_to_date(@course_rqq@, \'%Y-%m-%d\')]\n' +
                 '     and [es.course_rq < str_to_date(@course_rqz@,\'%Y-%m-%d\') + 1]\n' +
                 '     and [bb.baby_name = @baby_name@]\n' +
@@ -32,14 +32,15 @@ var CourseSql = {
                     '  from courses es,\n' +
                     '\t babies bb\n' +
                     'where es.babyId = bb._id\n' +
-                    '  and es.yxbz = \'Y\'\n' +
+                    '  and [es.yxbz = @yxbz@]\n' +
                     '     and [es.course_rq >= str_to_date(@course_rqq@, \'%Y-%m-%d\')]\n' +
                     '     and [es.course_rq < str_to_date(@course_rqz@,\'%Y-%m-%d\') + 1]\n' +
                     '     and [bb.baby_name = @baby_name@]\n' +
                     '     and [es.status = @status@]\n' +
                     '     and [es.lx = @lx@]\n' ,
-    updateCourse:   'update course es set `status`= ? ,xgrq = now(),bz =?\n' +
-                    ' where es._id = ?',
+    updateCourse:   'update course es set `status`= ? ,' +
+                    '   xgrq = now(),bz =?\n' +
+                    ' where es._id = ? \n',
     queryBabyExpire :  'select * from babies where yxbz ="Y"  and course_count>0 ' +
                         'and  [ course_count <=  @course_count@ ] \n' +
                         'and  [ baby_name =  @baby_name@ ] \n' +

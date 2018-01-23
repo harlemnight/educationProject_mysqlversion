@@ -59,10 +59,10 @@
                             <td><%= course.father %></td>
                             <td><%= course.mather %></td>
                             <td><%= course.phone_no1 %></td>
-                            <td><a href="/course/add?id=<%=course._id %>"
-                                   onclick="if(confirm('确定添加?')==false)return false;">添加课程</a>
+                            <td><a href="/course/add?lx=0&id=<%=course.babyId %>&baby_name=<%=course.baby_name %>"
+                                   onclick="if(confirm('确定添加?')==false)return false;">课程签到</a>
                                 <a href="/course/cancel?id=<%=course._id %>"
-                                       onclick="if(confirm('确定取消?')==false)return false;">取消课程</a></td>
+                                       onclick="if(confirm('确定取消?')==false)return false;">取消签到</a></td>
                         </tr>
                         <% }) %>
                         </tbody>

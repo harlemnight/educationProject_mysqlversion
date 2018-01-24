@@ -11,13 +11,16 @@ var CourseSql = {
                 ') ' +
                 'values(?,str_to_date(?,\'%Y-%m-%d\'),?,?,?,?,?)',
     queryAll :  ' select es.course_rq,\n' +
-                '\tbb.baby_name,\n' +
-                '\tbb.father,\n' +
-                '\tbb.mather,\n' +
-                '\tbb.phone_no1,\n' +
-                '\tes.babyId,\n' +
-                '\tes._id,\n' +
-                '\tes.lx\n' +
+                '\t bb.baby_name,\n' +
+                '\t bb.father,\n' +
+                '\t bb.mather,\n' +
+                '\t bb.phone_no1,\n' +
+                '\t es.babyId,\n' +
+                '\t es._id,\n' +
+                '\t es.lx ,\n' +
+                'case when es.status=0 and es.yxbz ="Y"  then "已确认" \n' +
+                '\t else "未确认"\n' +
+                '\t end st '+
             '  from courses es,\n' +
                 '\t babies bb\n' +
                 'where es.babyId = bb._id\n' +
@@ -38,9 +41,16 @@ var CourseSql = {
                     '     and [bb.baby_name = @baby_name@]\n' +
                     '     and [es.status = @status@]\n' +
                     '     and [es.lx = @lx@]\n' ,
-    updateCourse:   'update course es set `status`= ? ,' +
-                    '   xgrq = now(),bz =?\n' +
+    cancelCourse:   'update courses es set yxbz = "N" ,' +
+                    '   xgrq = now() \n' +
                     ' where es._id = ? \n',
+    confirmAppoint:   'update courses es set status = 0 ,' +
+                    '   xgrq = now() \n' +
+                    ' where es.status = "2" and es._id = ? \n',
+    cancelAppoint:   'update courses es set ' +
+                    '   yxbz = "N" ,\n' +
+                    '   xgrq = now() \n' +
+                    ' where es.status = "2"  and es._id = ? \n',
     queryBabyExpire :  'select * from babies where yxbz ="Y"  and course_count>0 ' +
                         'and  [ course_count <=  @course_count@ ] \n' +
                         'and  [ baby_name =  @baby_name@ ] \n' +

@@ -51,11 +51,11 @@ var CourseSql = {
                     '   yxbz = "N" ,\n' +
                     '   xgrq = now() \n' +
                     ' where es.status = "2"  and es._id = ? \n',
-    queryBabyExpire :  'select * from babies where yxbz ="Y"  and course_count>0 ' +
+    queryBabyExpire :  'select * from babies where yxbz ="Y" ' +
                         'and  [ course_count <=  @course_count@ ] \n' +
                         'and  [ baby_name =  @baby_name@ ] \n' +
                         'order by lrrq desc limit ?,?',
-    queryBabyExpireCount :   'select count(1) cnt from babies where yxbz ="Y" and course_count>0 ' +
+    queryBabyExpireCount :   'select count(1) cnt from babies where yxbz ="Y" ' +
                         'and  [ course_count <=  @course_count@ ] \n' +
                         'and  [ baby_name =  @baby_name@ ] \n'
 };

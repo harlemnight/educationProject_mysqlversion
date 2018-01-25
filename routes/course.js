@@ -2,6 +2,7 @@ var express = require('express');
 var mysql = require('mysql');
 var dbConfig = require('../sqlmap/mysqldb');
 var CourseSql = require('../sqlmap/coursesql');
+var BabySql = require('../sqlmap/babysql');
 var Common = require('../service/common');
 var router = express.Router();
 var pool = mysql.createPool( dbConfig.mysql );
@@ -270,12 +271,28 @@ router.post('/add', function(req, res) {
                     msg:err.toString()
                 });
             }else {
+
                 if (req.body.lx=='0'){
-                    res.redirect('/course/list');
+                    var param = [-1,req.body.baby_id==""?null:req.body.baby_id];
+                    connection.query(BabySql.updateBabyCourse, param, function(err, rs) {
+                        if (err) {
+                            res.render('course/add', {
+                                baby_id:req.body.baby_id,
+                                baby_name:req.body.baby_name,
+                                course_rq : req.body.course_rq,
+                                lx : req.body.lx,
+                                title:title,
+                                msg:err.toString()
+                            });
+                        } else {
+                            res.redirect('/course/list');
+                        }
+                    });
+
                 } else {
+                    //预约不直接更新剩余课程数 需要进行确认才更新
                     res.redirect('/course/appoint_list');
                 }
-
             }
             connection.release();
         });
@@ -321,7 +338,7 @@ router.get('/confirmAppoint',function(req, res) {
     ];
 
     pool.getConnection(function(err, connection) {
-        connection.query(CourseSql.cancelCourse, param, function(err, result) {
+        connection.query(CourseSql.confirmAppoint, param, function(err, result) {
             if(err){
                 res.render('course/appoint_list', {
                     msg:err.toString()

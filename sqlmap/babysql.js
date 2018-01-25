@@ -48,7 +48,9 @@ var BabiesSql = {
                     'course_count = ? ,' +
                     'xgrq = now() '+
                     'where _id = ? ',
-    deleteBabyById :   'update babies set yxbz = "N" ,xgrq = now() where _id = ?'
+    deleteBabyById :   'update babies set yxbz = "N" ,xgrq = now() where _id = ?',
+    updateBabyCourse : 'update babies set course_count=course_count+? ,xgrq = now() where _id = ?'
+
 };
 
 module.exports = BabiesSql;

@@ -20,10 +20,10 @@ var BabiesSql = {
                 'course_count'+
                 ') ' +
                 'values(?,str_to_date(?, \'%Y-%m-%d\'),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-    queryAll :  'select * from babies where yxbz ="Y" order by lrrq desc limit ?,?',
+    queryAll :  'select * from babies where yxbz ="Y" order by  xgrq limit ?,?',
     queryAllBySearch :  'select * from babies where yxbz ="Y" and ' +
                         '( baby_name= ? or phone_no1 = ? or father = ? or mather = ?) ' +
-                        'order by lrrq desc limit ?,?',
+                        'order by xgrq desc limit ?,?',
     queryCount :   'select count(1) cnt from babies where yxbz ="Y"',
     queryCountBySearch :   'select count(1) cnt from babies where yxbz ="Y" and ' +
                         '( baby_name= ? or phone_no1 = ? or father = ? or mather = ?) ',

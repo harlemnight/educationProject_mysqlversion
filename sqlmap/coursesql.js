@@ -30,7 +30,7 @@ var CourseSql = {
                 '     and [bb.baby_name = @baby_name@]\n' +
                 '     and [es.status = @status@]\n' +
                 '     and [es.lx = @lx@] \n' +
-                '  order by course_rq desc limit ?,?',
+                '  order by es.xgrq desc limit ?,?',
      queryCount     : ' select count(1) cnt '+
                     '  from courses es,\n' +
                     '\t babies bb\n' +
@@ -54,7 +54,7 @@ var CourseSql = {
     queryBabyExpire :  'select * from babies where yxbz ="Y" ' +
                         'and  [ course_count <=  @course_count@ ] \n' +
                         'and  [ baby_name =  @baby_name@ ] \n' +
-                        'order by lrrq desc limit ?,?',
+                        'order by course_count limit ?,?',
     queryBabyExpireCount :   'select count(1) cnt from babies where yxbz ="Y" ' +
                         'and  [ course_count <=  @course_count@ ] \n' +
                         'and  [ baby_name =  @baby_name@ ] \n'

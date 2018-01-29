@@ -41,7 +41,7 @@
                     <thead>
                     <tr>
                         <th style="width:4%;">序号</th>
-                        <th style="width:11%;">课程日期</th>
+                        <th style="width:11%;">预约日期</th>
                         <th style="width:10%;">姓名</th>
                         <th style="width:10%;">父亲</th>
                         <th style="width:10%;">母亲</th>
@@ -63,7 +63,7 @@
                             <td><%= course.st %></td>
                             <td>
                             <% if(course.st=='未确认') { %>
-                                <a href="/course/confirmAppoint?id=<%=course._id %>"
+                                <a href="/course/confirmAppoint?id=<%=course._id %>&babyId=<%=course.babyId %>"
                                    onclick="if(confirm('确认课程?')==false)return false;">确认课程</a>
                                 <a href="/course/cancelAppoint?id=<%=course._id %>"
                                    onclick="if(confirm('确定取消?')==false)return false;">取消预约</a>

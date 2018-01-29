@@ -60,7 +60,7 @@
                             <td><%= course.mather %></td>
                             <td><%= course.phone_no1 %></td>
                             <td>
-                                <a href="/course/cancel?id=<%=course._id %>"
+                                <a href="/course/cancel?id=<%=course._id %>&babyId=<%=course.babyId %>"
                                        onclick="if(confirm('确定取消?')==false)return false;">取消签到</a></td>
                         </tr>
                         <% }) %>

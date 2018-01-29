@@ -48,13 +48,8 @@ CREATE TABLE `babies` (
 
 /*Data for the table `babies` */
 
-insert  into `babies`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`,`grandma`,`home_address`,`phone_no1`,`phone_no2`,`case`,`allergy`,`hobby`,`character`,`member_lx`,`init_count`,`course_count`,`lrrq`,`xgrq`,`status`,`yxbz`) values 
-(1,'陈亚寒','2014-01-02',3,'陈元',NULL,NULL,NULL,'重庆南岸','17783119364',NULL,'心脏病','花生过敏',NULL,NULL,'1',30,0,'2018-01-13 14:17:37','2018-01-13 14:17:37','0','Y'),
-(2,'含韵','2016-06-15',2,NULL,'含苞',NULL,NULL,NULL,'12623119364',NULL,NULL,NULL,NULL,NULL,'2',90,90,'2018-01-13 14:19:32','2018-01-13 14:19:32','0','Y'),
-(3,'张建亚','2012-07-02',5,'张玉玺','韩亚巍','张菲菲','雅菲哦','重庆渝中区','12623113423',NULL,NULL,NULL,NULL,NULL,'3',180,180,'2018-01-13 14:21:00','2018-01-13 14:21:00','0','Y'),
-(4,'紫云没','2013-08-09',5,'子涵','姚非',NULL,NULL,'重庆渝北','13923113423',NULL,NULL,NULL,NULL,NULL,'0',10,10,'2018-01-13 14:22:09','2018-01-13 14:22:09','0','Y'),
-(5,'谭维','2013-03-01',4,'谭非','亚萨萨',NULL,NULL,'重庆贝贝','17823113423',NULL,NULL,NULL,NULL,NULL,'1',30,30,'2018-01-13 14:23:34','2018-01-13 14:23:34','0','Y'),
-(6,'刘毅非','2013-01-04',4,'刘爸爸','刘妈妈',NULL,NULL,'重庆南岸','15823123423',NULL,NULL,NULL,NULL,NULL,'1',7,10,'2018-01-13 14:25:34','2018-01-13 14:25:34','0','Y');
+insert  into `babies`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`,`grandma`,`home_address`,`phone_no1`,`phone_no2`,`case`,`allergy`,`hobby`,`character`,`member_lx`,`init_count`,`course_count`,`lrrq`,`xgrq`,`status`,`yxbz`) values
+(1,'陈亚寒','2014-01-02',3,'陈元',NULL,NULL,NULL,'重庆南岸','17783119364',NULL,'心脏病','花生过敏',NULL,NULL,'1',5,4,'2018-01-13 14:17:37','2018-01-29 21:35:33','0','Y');
 
 /*Table structure for table `courses` */
 
@@ -73,20 +68,12 @@ CREATE TABLE `courses` (
   `bz` varchar(500) DEFAULT NULL,
   `lx` char(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=267 DEFAULT CHARSET=utf8;
 
 /*Data for the table `courses` */
 
-insert  into `courses`(`_id`,`babyId`,`course_bh`,`course_rq`,`course_time`,`lrrq`,`xgrq`,`yxbz`,`status`,`bz`,`lx`) values 
-(64,2,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL,'0'),
-(65,3,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL,'0'),
-(66,5,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','0',NULL,'0'),
-(67,6,'2018-01-15','2018-01-15',NULL,'2018-01-15 16:12:49','2018-01-15 16:12:49','Y','1',NULL,'0'),
-(92,6,'2018-01-20','2018-01-20',NULL,'2018-01-16 12:13:00','2018-01-16 12:13:00','Y','2',NULL,'1'),
-(121,2,'2018-01-16','2018-01-16',NULL,'2018-01-16 17:00:10','2018-01-16 17:00:10','Y','0',NULL,'0'),
-(122,3,'2018-01-16','2018-01-16',NULL,'2018-01-16 17:00:10','2018-01-16 17:00:10','Y','0',NULL,'0'),
-(123,5,'2018-01-16','2018-01-16',NULL,'2018-01-16 17:00:10','2018-01-16 17:00:10','Y','0',NULL,'0'),
-(124,6,'2018-01-16','2018-01-16',NULL,'2018-01-16 17:00:10','2018-01-16 17:00:10','Y','0',NULL,'0');
+insert  into `courses`(`_id`,`babyId`,`course_bh`,`course_rq`,`course_time`,`lrrq`,`xgrq`,`yxbz`,`status`,`bz`,`lx`) values
+(261,1,'2018-01-01','2018-01-01','2018-01-01','2018-01-29 21:22:21','2018-01-29 21:35:33','Y','0',NULL,'0');
 
 /*Table structure for table `employees` */
 
@@ -112,11 +99,31 @@ CREATE TABLE `employees` (
 
 /*Data for the table `employees` */
 
-insert  into `employees`(`_id`,`employee_name`,`password`,`age`,`email`,`home_address`,`phone_no1`,`phone_no2`,`lrrq`,`xgrq`,`yxbz`,`rzrq`,`lzrq`,`status`) values 
+insert  into `employees`(`_id`,`employee_name`,`password`,`age`,`email`,`home_address`,`phone_no1`,`phone_no2`,`lrrq`,`xgrq`,`yxbz`,`rzrq`,`lzrq`,`status`) values
 (1,'周宇东','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 21:53:58','2018-01-10 21:53:58','Y',NULL,NULL,'0'),
-(2,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 22:40:32','2018-01-10 22:40:32','Y',NULL,NULL,'0'),
-(3,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 23:12:17','2018-01-10 23:12:17','Y',NULL,NULL,'0'),
+(2,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 22:40:32','2018-01-29 22:15:34','N',NULL,NULL,'0'),
+(3,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 23:12:17','2018-01-29 22:15:29','N',NULL,NULL,'0'),
 (4,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 23:40:03','2018-01-10 23:40:03','Y',NULL,NULL,'0');
+
+/*Table structure for table `holidays` */
+
+DROP TABLE IF EXISTS `holidays`;
+
+CREATE TABLE `holidays` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `course_date` date NOT NULL,
+  `course_lx` char(1) NOT NULL DEFAULT '0',
+  `lrrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `yxbz` char(1) NOT NULL DEFAULT 'Y',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+/*Data for the table `holidays` */
+
+insert  into `holidays`(`id`,`course_date`,`course_lx`,`lrrq`,`xgrq`,`yxbz`) values
+(1,'2018-01-30','0','2018-01-29 22:17:03','2018-01-29 22:17:03','Y'),
+(2,'2018-01-31','1','2018-01-29 22:17:26','2018-01-29 22:17:26','Y');
 
 /*Table structure for table `orders` */
 
@@ -134,24 +141,14 @@ CREATE TABLE `orders` (
   `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `yxbz` char(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 /*Data for the table `orders` */
 
-insert  into `orders`(`_id`,`baby_id`,`order_date`,`member_lx`,`course_count`,`czlx_dm`,`je`,`lrrq`,`xgrq`,`yxbz`) values 
-(1,1,'2017-11-06','1',30,'0',3000.00,'2018-01-13 20:52:26','2018-01-13 20:52:26','Y'),
-(2,2,'2017-11-22','2',90,'0',9000.00,'2018-01-13 20:52:59','2018-01-13 20:52:59','Y'),
-(3,3,'2017-11-17','3',180,'0',18000.00,'2018-01-13 20:53:16','2018-01-13 20:53:16','Y'),
-(4,4,'2017-10-21','0',10,'0',1000.00,'2018-01-13 20:53:53','2018-01-13 20:53:53','Y'),
-(5,5,'2017-10-03','1',30,'0',3000.00,'2018-01-13 20:54:19','2018-01-13 20:54:19','Y'),
-(6,6,'2017-11-15','0',7,'0',700.00,'2018-01-13 20:54:53','2018-01-13 20:54:53','Y'),
-(7,4,'2018-01-13','1',30,'1',3000.00,'2018-01-13 20:57:12','2018-01-13 20:57:12','Y'),
-(10,6,'2018-01-16','0',1,'1',100.00,'2018-01-14 15:28:46','2018-01-14 15:28:46','Y'),
-(11,6,'2018-01-18','1',30,'1',3000.00,'2018-01-14 15:29:51','2018-01-14 15:29:51','Y'),
-(14,6,'2018-01-16','0',2,'1',200.00,'2018-01-14 16:00:59','2018-01-14 16:00:59','Y'),
-(15,6,'2018-01-18','1',30,'1',3000.00,'2018-01-14 16:01:33','2018-01-14 16:01:33','Y'),
-(16,6,'2018-01-18','1',-30,'2',3000.00,'2018-01-14 16:02:21','2018-01-14 16:02:21','Y'),
-(17,6,'2018-01-18','1',-30,'2',-3000.00,'2018-01-14 16:07:16','2018-01-14 16:07:16','Y');
+insert  into `orders`(`_id`,`baby_id`,`order_date`,`member_lx`,`course_count`,`czlx_dm`,`je`,`lrrq`,`xgrq`,`yxbz`) values
+(1,1,'2017-11-06','1',5,'0',500.00,'2018-01-13 20:52:26','2018-01-13 20:52:26','Y'),
+(18,1,'2018-01-29','1',5,'1',500.00,'2018-01-29 21:32:58','2018-01-29 21:32:58','Y'),
+(19,1,'2018-01-29','1',-5,'2',-500.00,'2018-01-29 21:33:25','2018-01-29 21:33:25','Y');
 
 /*Table structure for table `sysconfig` */
 
@@ -177,8 +174,8 @@ CREATE TABLE `sysconfig` (
 
 DELIMITER $$
 
-/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `job_createCourseRecord_at_1000` ON SCHEDULE EVERY 1 HOUR STARTS '2018-01-14 21:00:10' ON COMPLETION NOT PRESERVE ENABLE DO begin
-	    call p_createCourseRecord();  
+/*!50106 CREATE DEFINER=`root`@`localhost` EVENT `job_createCourseRecord_at_1000` ON SCHEDULE EVERY 1 DAY STARTS '2018-01-14 10:00:00' ON COMPLETION NOT PRESERVE ENABLE DO begin
+	    call p_createCourseRecord();
 
 	end */$$
 DELIMITER ;
@@ -194,7 +191,7 @@ BEGIN
 	start transaction;
 	    set @timenow=now(); #开始事务
 	    # 表1
-	    -- update tb_ev_stocks set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;  
+	    -- update tb_ev_stocks set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;
 	    # 表2
 	   --  update tb_ev_stock_details set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;
 	    insert into courses (
@@ -214,7 +211,7 @@ where bb.yxbz = 'Y'
      and bb.member_lx > '0'
      and bb.status = '0'
      and bb.course_count > 0;
-	    
+
 	    commit;  #提交事务
     END */$$
 DELIMITER ;

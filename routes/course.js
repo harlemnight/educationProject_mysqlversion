@@ -293,8 +293,9 @@ router.post('/add', function(req, res) {
                     //预约不直接更新剩余课程数 需要进行确认才更新
                     res.redirect('/course/appoint_list');
                 }
+                connection.release();
             }
-            connection.release();
+
         });
     });
 
@@ -318,9 +319,16 @@ router.get('/cancel',function(req, res) {
                     msg:err.toString()
                 });
             }else {
-                    res.redirect('/course/cancel_list');
+                     param = [1,req.query.babyId==""?null:req.query.babyId];
+                    connection.query(BabySql.updateBabyCourse, param, function(err, rs) {
+                        if (err) {
+                            res.redirect('/course/cancel_list');
+                        } else {
+                            res.redirect('/course/cancel_list');
+                        }
+                        connection.release();
+                    });
             }
-            connection.release();
         });
     });
 });
@@ -344,9 +352,16 @@ router.get('/confirmAppoint',function(req, res) {
                     msg:err.toString()
                 });
             }else {
-                res.redirect('/course/appoint_list');
+                 param = [-1,req.query.babyId==""?null:req.query.babyId];
+                connection.query(BabySql.updateBabyCourse, param, function(err, rs) {
+                    if (err) {
+                        res.redirect('/course/appoint_list');
+                    } else {
+                        res.redirect('/course/appoint_list');
+                    }
+                    connection.release();
+                });
             }
-            connection.release();
         });
     });
 });

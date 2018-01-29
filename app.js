@@ -17,6 +17,8 @@ var baby = require('./routes/baby');
 var course = require('./routes/course');
 var order = require('./routes/order');
 var config = require('./routes/config');
+var holiday = require('./routes/holiday');
+
 
 
 
@@ -44,6 +46,8 @@ app.use('/baby',baby);
 app.use('/course',course);
 app.use('/order',order);
 app.use('/config',config);
+app.use('/holiday',holiday);
+
 
 
 

@@ -4,107 +4,128 @@
     //alert(moment(<= baby.birthday>).format('YYYY-MM-DD'));
 </script>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h2 class="sub-header">宝贝信息</h2>
-    <div class="row placeholders">
-        <form class="navbar-form navbar-right" action="/baby/list" method="get"  >
-            <input type="text" class="form-control" name="searchParams"
-                   id="searchParams"  placeholder="姓名/电话/父亲/母亲"
-                   value="<%=locals.searchParams %>"
-            >
-            <button type="submit" class="btn btn-default">搜索</button>
-        </form>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th style="width:4%;">序号</th>
-                <th style="width:8%;">姓名</th>
-                <th style="width:10%;">出生日期</th>
-                <th style="width:10%;">父亲</th>
-                <th style="width:10%;">母亲</th>
-                <th style="width:8%;">剩余天数</th>
-                <th style="width:10%;">联系电话1</th>
-                <th style="width:1%;" ></th>
-                <th style="width:8%;" ><a href="/baby/add">添加</a></th>
-                <th style="width:12%;" >课程管理</a></th>
-            </tr>
-            </thead>
-            <% if (status) { %>
-            <% if (babies.length) { %>
-            <tbody>
-            <% babies.forEach(function(baby,index){ %>
-            <tr>
-                <td><%=index+1+parseInt(offset) %></td>
-                <td ><%= baby.baby_name %></td>
-                <td ><%= toLocalDate(baby.birthday) %></td>
-                <td><%= baby.father %></td>
-                <td ><%= baby.mather %></td>
-                <td><%= baby.course_count %></td>
-                <td><%= baby.phone_no1 %></td>
-                <td ></td>
-                <td >
-                    <a href="/baby/modify/<%=baby._id %>">修改</a>
-                    <a href="/baby/delete?_id=<%=baby._id %>"
-                       onclick="if(confirm('确定删除?')==false)return false;">删除</a>
-                </td>
-                <td>
-                    <% if(baby.course_count>0) { %>
+    <h2 class="sub-header">自动签到日期设置</h2>
 
-                    <a href="/course/add?lx=0&id=<%=baby._id %>&baby_name=<%= baby.baby_name %>"
-                    >课程签到</a>
-                    <a href="/course/add?lx=2&id=<%=baby._id %>&baby_name=<%= baby.baby_name %>"
-                    >课程预约</a>
-                    <% }else { %>
-                    <% }%>
+    <form id="course_form" name="course_form" class="form-inline"  action="/holiday/list" method="get"  >
+        <div class="form-group">
+            <div class="input-group date form_date" data-date-format="yyyy-mm-dd" >
+                <input type="text" class="form-control" name="course_rqq"
+                       id = "course_rqq" placeholder="日期起"
+                       value="<%=locals.course_rqq %>"
+                       readonly
+                >
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group date form_date" data-date-format="yyyy-mm-dd" >
+                <input type="text" class="form-control" name="course_rqz"
+                       id = "course_rqz" placeholder="日期止"
+                       value="<%=locals.course_rqz %>"
+                       readonly
+                >
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-default" onclick="forward(2)">查询</button>
 
-                </td>
-
-            </tr>
-            <% }) %>
-            </tbody>
-            <% } %>
-            <% } else {%>
-            <% } %>
-            <tr>
-                <td></td><td></td><td></td>
-                <td></td><td></td><td></td>
-                <td align="right" colspan="4" >
-                    <a href="javascript:void(0);" onclick="forward(-1)">上一页</a>
-                    |
-                    <%=parseInt(pageNum) %>
-                    |
-                    <a href="javascript:void(0);" onclick="forward(1)">下一页</a>
-                    共<%=pageTotal %>页
-                    <input type="text" id="pageNum" style="width:30px;"/>
-                    <a href="javascript:void(0);" onclick="forward(0)">跳转</a>
-                </td>
-            </tr>
-        </table>
-    </div>
+        <div class="table-responsive" >
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th style="">序号</th>
+                    <th style="">设置日期</th>
+                    <th style="">过滤类型</th>
+                    <th style=""><a href="/holiday/add">添加</a></th>
+                </tr>
+                </thead>
+                <% if (holidays.length) { %>
+                <tbody>
+                <% holidays.forEach(function(holiday,index){ %>
+                <tr>
+                    <td><%=index+1+parseInt(offset) %></td>
+                    <td><%= toLocalDate(holiday.course_date)  %></td>
+                    <td><%= holiday.course_lx %></td>
+                    <td>
+                        <a href="/holiday/cancel?id=<%=holiday.id %>"
+                           onclick="if(confirm('确定取消?')==false)return false;">取消</a>
+                    </td>
+                </tr>
+                <% }) %>
+                </tbody>
+                <% } %>
+                <tr>
+                    <td></td>
+                    <td align="right" colspan="3">
+                        <a href="javascript:void(0);" onclick="forward(-1)">上一页</a>
+                        |
+                        <%=parseInt(pageNum) %>
+                        |
+                        <a href="javascript:void(0);" onclick="forward(1)">下一页</a>
+                        共<%=pageTotal %>页
+                        <input type="text" id="pageNum" style="width:30px;"/>
+                        <a href="javascript:void(0);" onclick="forward(0)">跳转</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
 </div>
 
 
-<script type="text/javascript">
 
+<script type="text/javascript">
     function forward(next){
         var num = $('#pageNum').val();
         if (isNaN(num)){
             num =0;
         }
         var page = (next==0)?num:parseInt('<%=pageNum%>')+ next;
-        window.location.href='/baby/list?page='+page+'&searchParams='+$('#searchParams').val();
+        window.location.href='/course/list?page='+page+'&baby_name='+$('#baby_name').val()+
+            '&course_rqq='+$('#course_rqq').val()+
+            '&course_rqz='+$('#course_rqz').val();
     };
 
+    function formCheck(){
+        /*
+        var rqz = $('#course_rqz').val();
+        var rqq = $('#course_rqq').val();
+        var baby_name = $("#baby_name").val();
+        if (baby_name.length==0) {
+            if ( (rqq.length>0 && rqz.length==0) || (rqz.length>0 && rqq.length==0)){
+                 alert("课程日期起止必须同时选择");
+            }else {
+                if (DateDiff(rqz,rqq) > 30 ) {
+                    alert("起止日期建议不超过30天");
+                }
+            }
+        }
+        */
+    }
+
+    function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式
+        var  aDate,  oDate1,  oDate2,  iDays
+        aDate  =  sDate1.split("-")
+        oDate1 = new Date(aDate[0] , aDate[1] ,aDate[2]) //转换为12-18-2006格式
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[0] , aDate[1] , aDate[2])
+        iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数
+        return  iDays;
+    }
 
 
-    function check() {
-        //表单提交前再进行一次验证
-        var bootstrapValidator = $("#baby_form").data('bootstrapValidator');
-        //如果验证通过()则提交表单
-        return bootstrapValidator.validate();
-    };
-
-
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
 </script>
+
 <% include ../footer.html %>

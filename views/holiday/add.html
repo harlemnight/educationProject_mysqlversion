@@ -1,0 +1,81 @@
+<% include ../header.html %>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h1 class="page-header">添加日期设置</h1>
+
+    <form class="form-horizontal" id="course_form" method="post" action="/holiday/add" onsubmit="return formCheck()">
+
+        <div class="form-group">
+            <label for="course_lx" class="col-sm-2 control-label">日期类型</label>
+            <div class="col-sm-10">
+                <select class="form-control"  id="course_lx"  name="course_lx"  required >
+                    <option  ></option>
+                    <option value="0" <% if(locals.course_lx) { if(locals.course_lx==="0") {%> selected  <% }} %>>上课</option>
+                    <option value="1" <% if(locals.course_lx) { if(locals.course_lx==="1") {%> selected  <% }} %>>放假</option>
+                 </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="course_rq"  class="col-sm-2 control-label"><%=locals.title %>日期</label>
+            <div class="col-sm-10">
+                <div class="input-group date form_date" data-date-format="yyyy-mm-dd" >
+                    <input type="text" class="form-control" name="course_rq"
+                           id = "course_rq"
+                           value="<% if(locals.course_rq) {%><%=toLocalDate(course_rq) %><%}%>"
+                           readonly
+                    >
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">保存<%=locals.title %></button>
+            </div>
+        </div>
+
+
+            <% if(locals.msg) { %>
+                <%if(locals.status) { %>
+                    <div class="alert alert-success"  role="alert">
+                        <%=msg %>!
+                    </div>
+                <% }else { %>
+                    <div class="alert alert-danger"  role="alert">
+                        <%=msg %>!
+                    </div>
+                <% }
+             }%>
+
+
+
+        </form>
+</div>
+
+
+<script type="text/javascript">
+
+    function formCheck(){
+        if ( $('#course_rq').val().length==0){
+            alert("请设置日期");
+            return false;
+        }
+
+    };
+
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+</script>
+
+<% include ../footer.html %>

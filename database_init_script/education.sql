@@ -49,7 +49,7 @@ CREATE TABLE `babies` (
 /*Data for the table `babies` */
 
 insert  into `babies`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`,`grandma`,`home_address`,`phone_no1`,`phone_no2`,`case`,`allergy`,`hobby`,`character`,`member_lx`,`init_count`,`course_count`,`lrrq`,`xgrq`,`status`,`yxbz`) values
-(1,'陈亚寒','2014-01-02',3,'陈元',NULL,NULL,NULL,'重庆南岸','17783119364',NULL,'心脏病','花生过敏',NULL,NULL,'1',5,4,'2018-01-13 14:17:37','2018-01-29 21:35:33','0','Y');
+(1,'陈亚寒','2014-01-02',3,'陈元',NULL,NULL,NULL,'重庆南岸','17783119364',NULL,'心脏病','花生过敏',NULL,NULL,'1',1,1,'2018-01-13 14:17:37','2018-01-29 21:35:33','0','Y');
 
 /*Table structure for table `courses` */
 
@@ -68,12 +68,9 @@ CREATE TABLE `courses` (
   `bz` varchar(500) DEFAULT NULL,
   `lx` char(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=267 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=274 DEFAULT CHARSET=utf8;
 
 /*Data for the table `courses` */
-
-insert  into `courses`(`_id`,`babyId`,`course_bh`,`course_rq`,`course_time`,`lrrq`,`xgrq`,`yxbz`,`status`,`bz`,`lx`) values
-(261,1,'2018-01-01','2018-01-01','2018-01-01','2018-01-29 21:22:21','2018-01-29 21:35:33','Y','0',NULL,'0');
 
 /*Table structure for table `employees` */
 
@@ -117,13 +114,14 @@ CREATE TABLE `holidays` (
   `xgrq` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `yxbz` char(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `holidays` */
 
 insert  into `holidays`(`id`,`course_date`,`course_lx`,`lrrq`,`xgrq`,`yxbz`) values
-(1,'2018-01-30','0','2018-01-29 22:17:03','2018-01-29 22:17:03','Y'),
-(2,'2018-01-31','1','2018-01-29 22:17:26','2018-01-29 22:17:26','Y');
+(3,'2018-02-01','0','2018-02-01 14:58:45','2018-02-01 14:58:51','N'),
+(4,'2018-02-01','1','2018-02-01 14:58:59','2018-02-01 15:02:00','Y'),
+(8,'2018-02-01','0','2018-02-01 15:02:36','2018-02-01 15:02:36','Y');
 
 /*Table structure for table `orders` */
 
@@ -188,32 +186,66 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `p_createCourseRecord`()
 BEGIN
-	start transaction;
-	    set @timenow=now(); #开始事务
-	    # 表1
-	    -- update tb_ev_stocks set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;
-	    # 表2
-	   --  update tb_ev_stock_details set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;
-	    insert into courses (
-     babyId,
-     course_bh,
-     course_rq,
-     course_time
-)
-select
-     bb.`_id` babyId,
-     current_date() course_bh,
-     current_date()course_rq,
-     null course_time
-from
-     babies bb
-where bb.yxbz = 'Y'
-     and bb.member_lx > '0'
-     and bb.status = '0'
-     and bb.course_count > 0;
+      declare ls_lx char(1);
+      declare ld_default int;
+      set @timenow = now();
+      #开始事务
+       # 表1
+       -- update tb_ev_stocks set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;
+       # 表2
+       --  update tb_ev_stock_details set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;
+       -- 当前日期是否在节假日设置表中设置了 0上课 1 放假
+       select
+            course_lx
+            into
+            ls_lx
+      from
+            holidays
+      where yxbz = 'Y'
+            and course_date = current_date()
+      order by lrrq desc
+      limit 0, 1;
 
-	    commit;  #提交事务
-    END */$$
+	select DAYOFWEEK(current_date()) into ld_default;
+
+      -- 0上课  否则放假就不写
+      if (ls_lx = '0' or  (ls_lx is null and ld_default in (2,3,4,5,6)) )  then
+       start transaction;
+
+      insert into courses (
+            babyId,
+            course_bh,
+            course_rq,
+            course_time
+      )
+      select
+            bb._id babyId,
+            current_date() course_bh,
+            current_date() course_rq,
+            current_date() course_time
+      from
+            babies bb
+      where bb.yxbz = 'Y'
+            and bb.member_lx > '0'
+            and bb.status = '0'
+            and bb.course_count > 0;
+
+
+      update
+            babies bb
+      set
+            course_count = course_count - 1
+      where bb.yxbz = 'Y'
+            and bb.member_lx > '0'
+            and bb.status = '0'
+            and bb.course_count > 0;
+
+
+
+      commit;
+      #提交事务
+       end if;
+END */$$
 DELIMITER ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

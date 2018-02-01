@@ -72,16 +72,16 @@ router.get('/add',function(req, res) {
 router.post('/add', function(req, res) {
     var param = [
         req.body.course_rq==""?null:req.body.course_rq,
-        req.body.lx==""?null:req.body.lx
+        req.body.course_lx==""?null:req.body.course_lx
     ];
     pool.getConnection(function(err, connection) {
-        connection.query(HolidaySql.insert, param, function(err, result) {
-            if(err){
-                res.render('holiday/add', {
-                    course_rq:req.body.course_rq,
-                    lx : req.body.lx,
-                    msg:err.toString()
-                });
+                connection.query(HolidaySql.insert, param, function(err, result) {
+                    if(err){
+                        res.render('holiday/add', {
+                            course_rq:req.body.course_rq,
+                            lx : req.body.course_lx,
+                            msg:err.toString()
+                        });
             }else {
                 res.redirect('/holiday/list');
             }

@@ -1,4 +1,4 @@
-/*
+﻿/*
 SQLyog Ultimate v12.4.1 (64 bit)
 MySQL - 5.7.20-log : Database - education
 *********************************************************************
@@ -48,7 +48,7 @@ CREATE TABLE `babies` (
 
 /*Data for the table `babies` */
 
-insert  into `babies`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`,`grandma`,`home_address`,`phone_no1`,`phone_no2`,`case`,`allergy`,`hobby`,`character`,`member_lx`,`init_count`,`course_count`,`lrrq`,`xgrq`,`status`,`yxbz`) values
+insert  into `babies`(`_id`,`baby_name`,`birthday`,`age`,`father`,`mather`,`grandpa`,`grandma`,`home_address`,`phone_no1`,`phone_no2`,`case`,`allergy`,`hobby`,`character`,`member_lx`,`init_count`,`course_count`,`lrrq`,`xgrq`,`status`,`yxbz`) values 
 (1,'陈亚寒','2014-01-02',3,'陈元',NULL,NULL,NULL,'重庆南岸','17783119364',NULL,'心脏病','花生过敏',NULL,NULL,'1',1,1,'2018-01-13 14:17:37','2018-01-29 21:35:33','0','Y');
 
 /*Table structure for table `courses` */
@@ -68,7 +68,7 @@ CREATE TABLE `courses` (
   `bz` varchar(500) DEFAULT NULL,
   `lx` char(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=274 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=utf8;
 
 /*Data for the table `courses` */
 
@@ -96,7 +96,7 @@ CREATE TABLE `employees` (
 
 /*Data for the table `employees` */
 
-insert  into `employees`(`_id`,`employee_name`,`password`,`age`,`email`,`home_address`,`phone_no1`,`phone_no2`,`lrrq`,`xgrq`,`yxbz`,`rzrq`,`lzrq`,`status`) values
+insert  into `employees`(`_id`,`employee_name`,`password`,`age`,`email`,`home_address`,`phone_no1`,`phone_no2`,`lrrq`,`xgrq`,`yxbz`,`rzrq`,`lzrq`,`status`) values 
 (1,'周宇东','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 21:53:58','2018-01-10 21:53:58','Y',NULL,NULL,'0'),
 (2,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 22:40:32','2018-01-29 22:15:34','N',NULL,NULL,'0'),
 (3,'陈曦','123456',33,'33836858@qq.com','深圳市南山区科技园南区R2-B三楼','17783119364',NULL,'2018-01-10 23:12:17','2018-01-29 22:15:29','N',NULL,NULL,'0'),
@@ -118,7 +118,7 @@ CREATE TABLE `holidays` (
 
 /*Data for the table `holidays` */
 
-insert  into `holidays`(`id`,`course_date`,`course_lx`,`lrrq`,`xgrq`,`yxbz`) values
+insert  into `holidays`(`id`,`course_date`,`course_lx`,`lrrq`,`xgrq`,`yxbz`) values 
 (3,'2018-02-01','0','2018-02-01 14:58:45','2018-02-01 14:58:51','N'),
 (4,'2018-02-01','1','2018-02-01 14:58:59','2018-02-01 15:02:00','Y'),
 (8,'2018-02-01','0','2018-02-01 15:02:36','2018-02-01 15:02:36','Y');
@@ -143,7 +143,7 @@ CREATE TABLE `orders` (
 
 /*Data for the table `orders` */
 
-insert  into `orders`(`_id`,`baby_id`,`order_date`,`member_lx`,`course_count`,`czlx_dm`,`je`,`lrrq`,`xgrq`,`yxbz`) values
+insert  into `orders`(`_id`,`baby_id`,`order_date`,`member_lx`,`course_count`,`czlx_dm`,`je`,`lrrq`,`xgrq`,`yxbz`) values 
 (1,1,'2017-11-06','1',5,'0',500.00,'2018-01-13 20:52:26','2018-01-13 20:52:26','Y'),
 (18,1,'2018-01-29','1',5,'1',500.00,'2018-01-29 21:32:58','2018-01-29 21:32:58','Y'),
 (19,1,'2018-01-29','1',-5,'2',-500.00,'2018-01-29 21:33:25','2018-01-29 21:33:25','Y');
@@ -196,8 +196,8 @@ BEGIN
        --  update tb_ev_stock_details set FSTATUS=3 where FSTATUS=0 and FVALIDENDDATE < @timenow ;
        -- 当前日期是否在节假日设置表中设置了 0上课 1 放假
        select
-            course_lx
-            into
+            course_lx 
+            into 
             ls_lx
       from
             holidays
@@ -205,13 +205,13 @@ BEGIN
             and course_date = current_date()
       order by lrrq desc
       limit 0, 1;
-
+      
 	select DAYOFWEEK(current_date()) into ld_default;
-
+      
       -- 0上课  否则放假就不写
       if (ls_lx = '0' or  (ls_lx is null and ld_default in (2,3,4,5,6)) )  then
        start transaction;
-
+       
       insert into courses (
             babyId,
             course_bh,
@@ -229,8 +229,8 @@ BEGIN
             and bb.member_lx > '0'
             and bb.status = '0'
             and bb.course_count > 0;
-
-
+            
+      
       update
             babies bb
       set
@@ -239,9 +239,9 @@ BEGIN
             and bb.member_lx > '0'
             and bb.status = '0'
             and bb.course_count > 0;
-
-
-
+            
+                  
+            
       commit;
       #提交事务
        end if;
